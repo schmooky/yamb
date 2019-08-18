@@ -13,7 +13,7 @@
     "url": "https://github.com/dvasiliev97/discord-yamusic/issues"
   },
   "license": "ISC",
-  "main": "src/main.ts",
+  "main": "src/app.ts",
   "scripts": {
     "prod": "npm run build && npm run start",
     "start": "cross-env NODE_ENV=production node dist/app.js",
