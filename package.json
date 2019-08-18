@@ -3,15 +3,26 @@
   "version": "1.0.0",
   "description": "",
   "main": "src/main.js",
+  "author": "",
+  "keywords": [],
+  "license": "ISC",
   "scripts": {
     "start": "node src/main.js",
     "dev": "nodemon src/main.js",
     "lint": "eslint --ext .js .",
     "lint:fix": "eslint --fix --ext .js ."
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.(ts|js)": [
+      "npm run lint:fix",
+      "git add ."
+    ]
+  },
   "dependencies": {
     "axios": "^0.19.0",
     "discord.js": "^11.5.1",
@@ -20,10 +31,12 @@
     "yandex-music-api": "0.0.3"
   },
   "devDependencies": {
-    "nodemon": "^1.19.1",
     "eslint": "^5.3.0",
     "eslint-config-airbnb-base": "^13.1.0",
     "eslint-plugin-import": "^2.14.0",
-    "eslint-plugin-jest": "^22.7.1"
+    "eslint-plugin-jest": "^22.7.1",
+    "husky": "^3.0.4",
+    "lint-staged": "^9.2.3",
+    "nodemon": "^1.19.1"
   }
 }
