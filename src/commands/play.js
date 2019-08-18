@@ -1,24 +1,52 @@
-const getTracks = require('../utils/getTracks');
-const getTrackUrl = require('../utils/getTrackUrl');
+const Servers = require('../servers');
+
+const trackService = require('../services/tracks.service');
+
+const playMusic = async (name, queue, message) => {
+  const track = await trackService.fetchTracks(name);
+
+  message.guild.voiceConnection.playArbitraryInput(track[0].trackUrl)
+    .on('end', async () => {
+      queue.shift();
+
+      if (queue.isPlaying) {
+        await playMusic(queue.songs[0].title, queue, message);
+
+        return;
+      }
+
+      console.log('Queue has ended');
+    });
+};
 
 const play = async (message, args) => {
-  const { voiceChannel } = message.member;
+  const server = Servers.get(message.guild.id);
 
-  if (!voiceChannel) return;
+  if (!message.member.voiceChannel) return;
 
-  const permissions = voiceChannel.permissionsFor(message.client.user);
+  const permissions = message.member.voiceChannel.permissionsFor(message.client.user);
 
   if (!permissions.has('CONNECT') || !permissions.has('SPEAK')) return;
 
   try {
-    const tracks = await getTracks(args.join(' '));
-    const trackUrl = await getTrackUrl(tracks[0].storageDir);
+    const [track] = await trackService.fetchTracks(args.join(' '));
 
-    const dispatcher = await voiceChannel.join();
+    
+    const dispatcher = await message.member.voiceChannel.join();
 
-    dispatcher.playArbitraryInput(trackUrl);
+    if (!server.queue.isPlaying) {
+      server.queue.add(track);
 
-    await message.channel.send(`Playing ${tracks[0].title} by ${tracks[0].artists[0].name}`);
+      await playMusic(track.title, server.queue, message);
+
+      await message.channel.send(`🎵 Playing ${track.title} by ${track.artists[0].name}`);
+
+      return;
+    }
+
+    server.queue.add(track);
+
+    await message.channel.send(`🎵 Playing ${track.title} by ${track.artists[0].name}`);
   } catch (error) {
     await message.reply(error.message);
   }

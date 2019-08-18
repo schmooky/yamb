@@ -1,5 +1,9 @@
+const Servers = require('../servers');
+
 const stop = async (message) => {
-  if (!message.member.voiceChannel) return;
+  const server = Servers.get(message.guild.id);
+
+  server.queue.clear();
 
   message.member.voiceChannel.leave();
 

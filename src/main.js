@@ -6,9 +6,13 @@ dotenv.config();
 
 /* Commands */
 const play = require('./commands/play');
-const help = require('./commands/help');
 const stop = require('./commands/stop');
+const queue = require('./commands/queue');
+const help = require('./commands/help');
+const clear = require('./commands/clear');
 const notFound = require('./commands/notFound');
+
+const Servers = require('./servers');
 
 const bot = new Discord.Client();
 const prefix = process.env.PREFIX;
@@ -20,7 +24,11 @@ bot.on('ready', async () => {
 });
 
 bot.on('message', async (message) => {
-  if (message.author.bot) return;
+  if (message.author.bot || !message.content.startsWith(prefix)) return;
+
+  if (!Servers.has(message.guild.id)) {
+    Servers.add(message.guild.id, message);
+  }
 
   const args = message.content.trim().split(' ');
   const cmd = args.shift().toLowerCase();
@@ -30,12 +38,20 @@ bot.on('message', async (message) => {
       await play(message, args);
       break;
 
+    case `${prefix}stop`:
+      await stop(message, args);
+      break;
+
+    case `${prefix}queue`:
+      await queue(message);
+      break;
+
     case `${prefix}help`:
       await help(message, args);
       break;
 
-    case `${prefix}stop`:
-      await stop(message, args);
+    case `${prefix}clear`:
+      await clear(message, args);
       break;
 
     default:
