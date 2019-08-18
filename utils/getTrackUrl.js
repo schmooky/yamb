@@ -1,4 +1,3 @@
-const https = require('https');
 const crypto = require('crypto');
 const axios = require('axios');
 
@@ -11,6 +10,8 @@ const getStorageDir = async (storageDir) => {
     return response.data;
   } catch (error) {
     console.log(error);
+
+    return error;
   }
 };
 
@@ -30,6 +31,8 @@ const createLink = async (storageDir) => {
     return link;
   } catch (error) {
     console.log(error);
+
+    return error;
   }
 };
 

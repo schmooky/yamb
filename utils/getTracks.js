@@ -1,5 +1,7 @@
 const YandexMusicApi = require('yandex-music-api');
-const dotenv = require('dotenv').config();
+const dotenv = require('dotenv');
+
+dotenv.config();
 
 const api = new YandexMusicApi();
 
@@ -21,6 +23,8 @@ const getTracks = async (name) => {
     return results.tracks.results;
   } catch (error) {
     console.log(error);
+
+    return error;
   }
 };
 

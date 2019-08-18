@@ -1,4 +1,4 @@
-const help = async (message, args) => {
+const help = async (message) => {
   await message.reply('There is no help');
 };
 

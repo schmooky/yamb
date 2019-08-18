@@ -18,9 +18,9 @@ const play = async (message, args) => {
 
     dispatcher.playArbitraryInput(trackUrl);
 
-    return await message.channel.send(`Playing ${tracks[0].title} by ${tracks[0].artists[0].name}`);
+    await message.channel.send(`Playing ${tracks[0].title} by ${tracks[0].artists[0].name}`);
   } catch (error) {
-    return await message.reply(error.message);
+    await message.reply(error.message);
   }
 };
 

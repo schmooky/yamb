@@ -1,4 +1,4 @@
-const stop = async (message, args) => {
+const stop = async (message) => {
   if (!message.member.voiceChannel) return;
 
   message.member.voiceChannel.leave();
