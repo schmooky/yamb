@@ -4,8 +4,6 @@ const stop = async (message, args) => {
   message.member.voiceChannel.leave();
 
   await message.channel.send('Player stopped.');
-
-  return;
-}
+};
 
 module.exports = stop;
