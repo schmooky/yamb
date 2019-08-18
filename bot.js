@@ -8,6 +8,7 @@ dotenv.config();
 const play = require('./commands/play');
 const help = require('./commands/help');
 const stop = require('./commands/stop');
+const notFound = require('./commands/notFound');
 
 const bot = new Discord.Client();
 const prefix = process.env.PREFIX;
@@ -38,6 +39,7 @@ bot.on('message', async (message) => {
       break;
 
     default:
+      await notFound(message, args);
       break;
   }
 });
