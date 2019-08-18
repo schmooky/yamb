@@ -12,7 +12,6 @@ const play = async (message, args) => {
 
   try {
     const tracks = await getTracks(args.join(' '));
-
     const trackUrl = await getTrackUrl(tracks[0].storageDir);
 
     const dispatcher = await voiceChannel.join();
