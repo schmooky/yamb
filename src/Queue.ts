@@ -22,16 +22,14 @@ export default class Queue {
    * @param  {Track} newTrack Трек который нужно добавить
    * @returns boolean Получилось ли добавить трек
    */
-  public insertTrack(newTrack: Track): boolean {
+  public insertTrack(newTrack: Track): void {
     this.tracks.push(newTrack);
-
-    return true;
   }
 
   /**
    * Удаляет первый трек очереди
    *
-   * @returns boolean Возвращает первый трек
+   * @returns Track Возвращает первый трек
    */
   public shiftTrack(): Track | undefined {
     return this.tracks.shift();
@@ -43,6 +41,6 @@ export default class Queue {
    * @returns boolean Есть ли в очереди треки
    */
   public isPlaying(): boolean {
-    return (this.tracks.length !== 0);
+    return this.tracks.length !== 0;
   }
 }
