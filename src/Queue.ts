@@ -1,18 +1,16 @@
-// import { TextChannel, VoiceConnection} from 'discord.js';
+import { TextChannel, VoiceConnection } from 'discord.js';
 import { Track } from './services/track.service';
 
 export default class Queue {
-  private voiceChannel: string;
+  private voiceChannel: VoiceConnection;
 
-  // VoiceConnection
-  private textChannel: string;
+  private textChannel: TextChannel;
 
-  // TextChannel
   private tracks: Track[];
 
-  public constructor() {
-    this.voiceChannel = '';
-    this.textChannel = '';
+  public constructor(voiceChannel: VoiceConnection, textChannel: TextChannel) {
+    this.voiceChannel = voiceChannel;
+    this.textChannel = textChannel;
     this.tracks = [];
   }
 
