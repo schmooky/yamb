@@ -12,7 +12,7 @@ interface DownloadInfo {
   host: string;
 }
 
-interface Track extends TrackInfo {
+export interface Track extends TrackInfo {
   trackUrl: string;
 }
 
