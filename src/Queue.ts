@@ -31,12 +31,10 @@ export default class Queue {
   /**
    * Удаляет первый трек очереди
    *
-   * @returns boolean Получилось ли удалить первый трек
+   * @returns boolean Возвращает первый трек
    */
-  public shiftTrack(): boolean {
-    this.tracks.pop();
-
-    return true;
+  public shiftTrack(): Track | undefined {
+    return this.tracks.shift();
   }
 
   /**
