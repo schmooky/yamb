@@ -2,7 +2,7 @@ import { Message, Permissions } from 'discord.js';
 
 import trackService from '../services/track.service';
 
-import isURL from '../utils/isURL';
+import { isURL, isYandexURL } from '../utils/isURL';
 
 /**
  * Обрабатывает команду воспроизведения трека
@@ -13,7 +13,8 @@ import isURL from '../utils/isURL';
  */
 const play = async (message: Message, args: string[]): Promise<void> => {
   if (!message.member.voiceChannel) {
-    await message.channel.send('❌ You have to be in a voice channel');
+    await message.channel.send('❌ You are not in a voice channel');
+
     return;
   }
 
@@ -22,31 +23,27 @@ const play = async (message: Message, args: string[]): Promise<void> => {
   if (!permissions.has('CONNECT') || !permissions.has('SPEAK')) return;
 
   try {
+    if (isYandexURL(args[0])) {
+      await message.channel.send('🎵 Handling Yandex.Music URL');
+      const { albumID, trackID } = trackService.parseTrackUrl(args[0]);
+      const track = await trackService.fetchTrackByID(trackID);
+
+      const connection = await message.member.voiceChannel.join();
+      connection.playArbitraryInput(track.trackURL);
+      return;
+    }
     if (isURL(args[0])) {
-      if (/album\/[0-9]*\/track\/[0-9]*/.test(args[0])) {
-        await message.channel.send('🎵 Handling Yandex.Music track URL');
-
-        return;
-      }
-
-      if (/album\/[0-9]*/.test(args[0])) {
-        await message.channel.send('🎶 Handling Yandex.Music album URL');
-
-        return;
-      }
-
-      await message.channel.send('❌ Handling wrong URL');
+      await message.channel.send('👺 Handling wrong URL');
 
       return;
     }
-
     await message.channel.send('📜 Handling text');
 
-    const [track] = await trackService.fetchTrack(args.join(' '));
+    const [track] = await trackService.fetchTracksByName(args.join(' '));
 
     const connection = await message.member.voiceChannel.join();
 
-    connection.playArbitraryInput(track.trackUrl);
+    connection.playArbitraryInput(track.trackURL);
 
     await message.channel.send(`🎵 Playing ${track.title} by ${track.artists[0].name}`);
   } catch (error) {

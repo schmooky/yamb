@@ -1,6 +1,7 @@
 import Discord from 'discord.js';
 
 import dotenv from 'dotenv';
+import { exec } from 'child_process';
 
 /* Commands */
 import play from './api/play';
@@ -14,7 +15,6 @@ const prefix = process.env.PREFIX as string;
 
 bot.on('ready', (): void => {
   console.log(`${bot.user.username} is online!`);
-
   bot.user.setActivity(`${prefix}help`);
 });
 

@@ -13,7 +13,7 @@ interface DownloadInfo {
 }
 
 export interface Track extends TrackInfo {
-  trackUrl: string;
+  trackURL: string;
 }
 
 interface DownloadID {
@@ -71,22 +71,71 @@ const getTrackUrl = (info: DownloadInfo): string => {
   return link;
 };
 
-const fetchTrack = async (name: string): Promise<Track[]> => {
-  const tracksDetails = await getTracks(name);
+const fetchTracksByName = async (name: string): Promise<Track[]> => {
+  try {
+    const tracksDetails = await getTracks(name);
 
-  const tracks = tracksDetails.map(async (track): Promise<Track> => {
+    const tracks = tracksDetails.map(async (track): Promise<Track> => {
+      const info = await getStorageDir(track.storageDir);
+      const trackURL = await getTrackUrl(info);
+
+      return {
+        ...track,
+        trackURL,
+      };
+    });
+
+    const fetchedTracks = await Promise.all(tracks);
+
+    return fetchedTracks;
+  } catch (error) {
+    console.log(error);
+
+    return error;
+  }
+};
+
+/**
+ * Запрашивает данные о треке с API Yandex.Music по ID трека
+ *
+ * @param  {string} id ID Трека
+ * @returns Promise Информация о треке
+ */
+const getTrackByID = async (id: string): Promise<TrackInfo> => {
+  try {
+    const JsonURL = `https://music.yandex.ru/handlers/track.jsx?track=${id}`;
+
+    const response = await axios.get(JsonURL);
+
+    return response.data.track;
+  } catch (error) {
+    console.log(error);
+
+    return error;
+  }
+};
+
+/**
+ * Получает трек по ID
+ *
+ * @param  {string} id ID Трека
+ * @returns Promise Искомый трек
+ */
+const fetchTrackByID = async (id: string): Promise<Track> => {
+  try {
+    const track = await getTrackByID(id);
     const info = await getStorageDir(track.storageDir);
-    const trackUrl = await getTrackUrl(info);
+    const trackURL = await getTrackUrl(info);
 
     return {
       ...track,
-      trackUrl,
+      trackURL,
     };
-  });
+  } catch (error) {
+    console.log(error);
 
-  const fetchedTracks = await Promise.all(tracks);
-
-  return fetchedTracks;
+    return error;
+  }
 };
 
 const parseTrackUrl = (url: string): DownloadID => {
@@ -103,6 +152,7 @@ const parseTrackUrl = (url: string): DownloadID => {
 export default {
   getStorageDir,
   getTrackUrl,
-  fetchTrack,
+  fetchTracksByName,
+  fetchTrackByID,
   parseTrackUrl,
 };
