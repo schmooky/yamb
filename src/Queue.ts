@@ -45,6 +45,15 @@ class Queue {
   }
 
   /**
+   * Отчищает очередь
+   *
+   * @returns {void}
+   */
+  public clear(): void {
+    this.tracks = [];
+  }
+
+  /**
    * Возвращает состояние очереди
    *
    * @returns {boolean} Есть ли в очереди треки

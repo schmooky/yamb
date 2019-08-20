@@ -5,6 +5,7 @@ import dotenv from 'dotenv';
 /* Commands */
 import play from './api/play';
 import help from './api/help';
+import stop from './api/stop';
 import notFound from './api/notFound';
 
 dotenv.config();
@@ -31,6 +32,10 @@ bot.on('message', async (message): Promise<void> => {
 
     case `${prefix}help`:
       await help(message, args);
+      break;
+
+    case `${prefix}stop`:
+      await stop(message);
       break;
 
     default:
