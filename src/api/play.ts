@@ -25,11 +25,14 @@ const play = async (message: Message, args: string[]): Promise<void> => {
   try {
     if (isYandexURL(args[0])) {
       await message.channel.send('🎵 Handling Yandex.Music URL');
+
       const { albumID, trackID } = trackService.parseTrackUrl(args[0]);
       const track = await trackService.fetchTrackByID(trackID);
 
       const connection = await message.member.voiceChannel.join();
+
       connection.playArbitraryInput(track.trackURL);
+
       return;
     }
     if (isURL(args[0])) {
