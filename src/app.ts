@@ -1,6 +1,7 @@
 import Discord from 'discord.js';
 
 import dotenv from 'dotenv';
+import { exec } from 'child_process';
 
 /* Commands */
 import play from './api/play';
@@ -15,7 +16,6 @@ const prefix = process.env.PREFIX as string;
 
 bot.on('ready', (): void => {
   console.log(`${bot.user.username} is online!`);
-
   bot.user.setActivity(`${prefix}help`);
 });
 
@@ -47,15 +47,11 @@ bot.on('message', async (message): Promise<void> => {
 process.on('SIGINT', (): void => {
   bot.destroy();
 
-  console.log('\x1b[31mSIGINT\x1b[0m');
-
   process.exit(1);
 });
 
 process.on('SIGUSR2', (): void => {
   bot.destroy();
-
-  console.log('\x1b[31mSIGUSR2\x1b[0m');
 
   process.exit(1);
 });

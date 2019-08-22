@@ -1,0 +1,5 @@
+sparklines:
+  - title: Info Log
+    rate-ms: 200
+    scale: 0
+    sample: wc -l log/info.log | awk '{print $1;}'
