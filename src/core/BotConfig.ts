@@ -46,7 +46,7 @@ const DefaultBotConfig: BotConfig = {
   },
 
   command: {
-    symbol: '~',
+    symbol: process.env.PREFIX as string,
   },
 
   queue: {

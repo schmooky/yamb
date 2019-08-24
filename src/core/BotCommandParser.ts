@@ -136,32 +136,35 @@ function getCommandName(content: string): string | null {
   return content.split(/\s+/g)[0] || null;
 }
 
+/* eslint-disable */
 function getArguments(str: string): string[] {
   const args = [];
-  let string = str.trim();
+  str = str.trim();
 
-  while (string.length) {
+  while (str.length) {
     let arg;
-    if (string.startsWith('"') && string.indexOf('"', 1) > 0) {
-      arg = string.slice(1, string.indexOf('"', 1));
-      string = string.slice(string.indexOf('"', 1) + 1);
-    } else if (string.startsWith("'") && string.indexOf("'", 1) > 0) {
-      arg = string.slice(1, string.indexOf("'", 1));
-      string = string.slice(string.indexOf("'", 1) + 1);
-    } else if (string.startsWith('```') && string.indexOf('```', 3) > 0) {
-      arg = string.slice(3, string.indexOf('```', 3));
-      string = string.slice(string.indexOf('```', 3) + 3);
+    if (str.startsWith('"') && str.indexOf('"', 1) > 0) {
+      arg = str.slice(1, str.indexOf('"', 1));
+      str = str.slice(str.indexOf('"', 1) + 1);
+    } else if (str.startsWith("'") && str.indexOf("'", 1) > 0) {
+      arg = str.slice(1, str.indexOf("'", 1));
+      str = str.slice(str.indexOf("'", 1) + 1);
+    } else if (str.startsWith('```') && str.indexOf('```', 3) > 0) {
+      arg = str.slice(3, str.indexOf('```', 3));
+      str = str.slice(str.indexOf('```', 3) + 3);
     } else {
-      arg = string.split(/\s+/g)[0].trim();
-      string = string.slice(arg.length);
+      arg = str.split(/\s+/g)[0].trim();
+      str = str.slice(arg.length);
     }
 
     args.push(arg.trim());
-    string = str.trim();
+    str = str.trim();
   }
 
   return args;
 }
+
+/* eslint-enable */
 
 export function parse<MT>(
   message: Message,
@@ -199,11 +202,13 @@ export function parse<MT>(
 
   let matchedPrefix = '';
 
-  Object.values(symbol).forEach((value: string): void => {
-    if (message.content.startsWith(value)) {
-      matchedPrefix = value;
+  // eslint-disable-next-line
+  for (const p of symbol) {
+    if (message.content.startsWith(p)) {
+      matchedPrefix = p;
+      break;
     }
-  });
+  }
 
   if (!matchedPrefix) {
     return fail('Message does not start with prefix.', ResultCode.NO_PREFIX_MATCH);
