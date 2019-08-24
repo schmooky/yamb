@@ -1,11 +1,74 @@
 import crypto from 'crypto';
 import axios from 'axios';
 import dotenv from 'dotenv';
-import YandexMusicApi, { TrackInfo } from 'yandex-music-api';
 import { isYandexURL, isTrackURL, isAlbumURL } from '../utils/isURL';
 import logger from '../utils/logger';
 
 dotenv.config();
+
+export interface SearchOptions {
+  type: string;
+}
+
+export interface AlbumInfo {
+  id: number;
+  storageDir: string;
+  originalReleaseYear: number;
+  year: number;
+  version: string;
+  type: string;
+  artists: [];
+  coverUri: string;
+  trackCount: number;
+  genre: string;
+  available: boolean;
+  availableForPremiumUsers: boolean;
+  title: string;
+}
+
+export interface Artist {
+  id: number;
+  cover: Cover;
+  composer: boolean;
+  name: string;
+  various: boolean;
+  decomposed: [];
+}
+
+export interface Cover {
+  type: string;
+  prefix: string;
+  uri: string;
+}
+
+export interface TrackInfo {
+  id: number;
+  available: boolean;
+  availableAsRbt: boolean;
+  availableForPremiumUsers: boolean;
+  lyricsAvailable: boolean;
+  albums: AlbumInfo[];
+  storageDir: string;
+  durationMs: number;
+  explicit: boolean;
+  title: string;
+  artists: Artist[];
+  regions: string[];
+}
+
+export interface SearchResult {
+  type: string;
+  page: number;
+  perPage: number;
+  text: string;
+  searchRequestId: string;
+  tracks: {
+    total: number;
+    perPage: number;
+    order: number;
+    results: TrackInfo[];
+  };
+}
 
 interface DownloadInfo {
   s: string;
@@ -23,7 +86,6 @@ interface DownloadID {
   albumID: string;
 }
 
-const api = new YandexMusicApi();
 
 /**
  * Запрашивает данные о треках с API Yandex.Music по названию трека
@@ -31,26 +93,29 @@ const api = new YandexMusicApi();
  * @param  {string} name Название трека
  * @returns Promise Информация о треках
  */
-const getTracksByName = async (name: string): Promise<TrackInfo[]> => {
-  try {
-    await api.init({ username: process.env.EMAIL, password: process.env.PASS });
 
-    const query = name;
-    const options = { type: 'track' };
 
-    const results = await api.search(query, options);
+// const getTracksByName = async (name: string): Promise<TrackInfo[]> => {
+//   try {
+//     await api.init({ username: process.env.EMAIL, password: process.env.PASS });
 
-    if (!results.tracks) {
-      return Promise.reject(Error(`${name} not found`));
-    }
+//     const query = name;
+//     const options = { type: 'track' };
 
-    return results.tracks.results;
-  } catch (error) {
-    logger.error(error);
+//     const results = await api.search(query, options);
 
-    return error;
-  }
-};
+//     if (!results.tracks) {
+//       return Promise.reject(Error(`${name} not found`));
+//     }
+
+//     return results.tracks.results;
+//   } catch (error) {
+//     logger.error(error);
+
+//     return error;
+//   }
+// };
+
 
 const getStorageDir = async (storageDir: string): Promise<DownloadInfo> => {
   try {
@@ -85,29 +150,29 @@ const getTrackURL = (info: DownloadInfo): string => {
  * @param  {string} name Имя трека
  * @returns Promise Искомые треки
  */
-const fetchTracksByName = async (name: string): Promise<Track[]> => {
-  try {
-    const tracksDetails = await getTracksByName(name);
+// const fetchTracksByName = async (name: string): Promise<Track[]> => {
+//   try {
+//     const tracksDetails = await getTracksByName(name);
 
-    const tracks = tracksDetails.map(async (track): Promise<Track> => {
-      const info = await getStorageDir(track.storageDir);
-      const trackURL = await getTrackURL(info);
+//     const tracks = tracksDetails.map(async (track): Promise<Track> => {
+//       const info = await getStorageDir(track.storageDir);
+//       const trackURL = await getTrackURL(info);
 
-      return {
-        ...track,
-        trackURL,
-      };
-    });
+//       return {
+//         ...track,
+//         trackURL,
+//       };
+//     });
 
-    const fetchedTracks = await Promise.all(tracks);
+//     const fetchedTracks = await Promise.all(tracks);
 
-    return fetchedTracks;
-  } catch (error) {
-    logger.error(error);
+//     return fetchedTracks;
+//   } catch (error) {
+//     logger.error(error);
 
-    return error;
-  }
-};
+//     return error;
+//   }
+// };
 
 /**
  * Запрашивает данные о треке с API Yandex.Music по ID трека
@@ -259,7 +324,6 @@ const findTracksByURL = async (url: string): Promise<Track[]> => {
 
 
 export default {
-  fetchTracksByName,
   fetchTrackByID,
   fetchAlbumByID,
   parseTrackURL,

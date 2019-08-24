@@ -1,15 +1,15 @@
 import { Message } from 'discord.js';
 
-const stop = async (message: Message): Promise<void> => {
-  if (!message.member.voiceChannel) {
-    await message.reply('You are not in a voice channel');
+import { Bot } from '../core/BotInterface';
+import { ParsedMessage } from '../core/BotCommandParser';
 
-    return;
-  }
-
-  await message.channel.send('Playing stopped');
-
-  message.member.voiceChannel.leave();
+const stop = async (cmd: ParsedMessage, msg: Message, bot: Bot) => {
+  bot.player.stop();
+  bot.player.connection = undefined;
+  bot.client.voiceConnections.forEach((connection) => {
+    connection.disconnect();
+    msg.channel.send(`:mute: Disconnecting from channel: ${connection.channel.name}`);
+  });
 };
 
 export default stop;

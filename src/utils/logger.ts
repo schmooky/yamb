@@ -8,7 +8,7 @@ const { env } = process;
 const logPath = `${cwd}/log`;
 
 const logThrough = new stream.PassThrough();
-const logger = pino({ name: 'project' }, logThrough);
+export const logger = pino({ name: 'project' }, logThrough);
 
 
 const child = childProcess.spawn(process.execPath, [
