@@ -11,71 +11,67 @@ import MediaQueue from './BotMediaQueue';
 import logger from '../utils/logger';
 
 class MediaPlayer {
-  typeRegistry: Map<string, MediaType> = new Map<string, MediaType>();
+  public typeRegistry: Map<string, MediaType> = new Map<string, MediaType>();
 
-  queue: MediaQueue = new MediaQueue();
+  public queue: MediaQueue = new MediaQueue();
 
-  status: BotStatus;
+  public status: BotStatus;
 
-  // ? Property 'status' has no initializer and is not definitely assigned in the constructor
-  config: BotConfig; // ? Property 'config' has no initializer and is not definitely assigned in the constructor
+  public config: BotConfig;
 
-  playing: boolean = false;
+  public playing: boolean = false;
 
-  paused: boolean = false;
+  public paused: boolean = false;
 
-  stopping: boolean = false;
+  public stopping: boolean = false;
 
-  channel?: TextChannel | DMChannel | GroupDMChannel;
+  public channel?: TextChannel | DMChannel | GroupDMChannel;
 
-  // ? Property 'channel' has no initializer and is not definitely assigned in the constructor
-  connection?: VoiceConnection;
+  public connection?: VoiceConnection;
 
-  dispatcher?: StreamDispatcher;
+  public dispatcher?: StreamDispatcher;
 
-  constructor(config: BotConfig, status: BotStatus) {
+  public constructor(config: BotConfig, status: BotStatus) {
     this.config = config;
     this.status = status;
   }
 
-  addMedia(item: MediaItem): Promise<MediaType> {
-    return new Promise((resolve, reject) => {
-      const type = this.typeRegistry.get(item.type);
+  public addMedia(item: MediaItem): void {
+    const type = this.typeRegistry.get(item.type);
 
-      console.log(item);
+    if (type) {
+      this.queue.enqueue(item);
 
-      if (type) {
-        this.queue.enqueue(item);
-
-        if (this.channel && item) {
-          this.channel.send(
-            `✅ ${item.type} track added: "${item.name}" @ #${this.queue.indexOf(item) + 1}`,
-          );
-        }
-      } else if (this.channel) this.channel.send('Error adding track: Unknown Media Type!');
-    });
+      if (this.channel && item) {
+        this.channel.send(
+          `:dvd: ${item.type} track added: "${item.name}" - #${this.queue.indexOf(item) + 1}`,
+        );
+      }
+    } else if (this.channel) this.channel.send('Error adding track: Unknown Media Type!');
   }
 
-  at(idx: number) {
+  public at(idx: number): MediaItem {
     return this.queue[idx];
   }
 
-  dispatchStream(stream: string, item: MediaItem) {
-    console.log(stream);
-
+  public dispatchStream(stream: string, item: MediaItem): void {
     if (this.dispatcher) {
       this.dispatcher.end();
       this.dispatcher = undefined;
     }
 
-    this.dispatcher = this.connection!.playArbitraryInput(stream, {
+    if (!this.connection) {
+      return;
+    }
+
+    this.dispatcher = this.connection.playArbitraryInput(stream, {
       seek: this.config.stream.seek,
       volume: this.config.stream.volume,
       passes: this.config.stream.passes,
       bitrate: this.config.stream.bitrate,
     });
 
-    this.dispatcher.on('start', () => {
+    this.dispatcher.on('start', (): void => {
       this.playing = true;
 
       if (this.channel) {
@@ -83,13 +79,11 @@ class MediaPlayer {
       }
     });
 
-    this.dispatcher.on('debug', (info: string) => {
-      console.log(info);
-
+    this.dispatcher.on('debug', (info: string): void => {
       logger.debug(info);
     });
 
-    this.dispatcher.on('error', (err) => {
+    this.dispatcher.on('error', (err): void => {
       this.skip();
 
       logger.error(err);
@@ -97,7 +91,7 @@ class MediaPlayer {
       if (this.channel) this.channel.send(`Error Playing Song: ${err}`);
     });
 
-    this.dispatcher.on('end', (reason: string) => {
+    this.dispatcher.on('end', (reason: string): void => {
       logger.debug(`Stream Ended: ${reason}`);
 
       if (this.playing) {
@@ -117,10 +111,14 @@ class MediaPlayer {
     });
   }
 
-  play() {
-    if (this.queue.length == 0 && this.channel) this.channel.send('Queue is empty! Add some songs!');
+  public play(): void {
+    if (this.queue.length === 0 && this.channel) {
+      this.channel.send('Queue is empty! Add some songs!');
+    }
 
-    if (this.playing && !this.paused) this.channel!.send('Already playing a song!');
+    if (this.playing && !this.paused && this.channel) {
+      this.channel.send('Already playing a song!');
+    }
 
     const item = this.queue.first;
 
@@ -128,10 +126,8 @@ class MediaPlayer {
       const type = this.typeRegistry.get(item.type);
 
       if (type) {
-        console.log('type');
-
         if (!this.playing) {
-          type.getStream(item).then((stream: string) => {
+          type.getStream(item).then((stream: string): void => {
             this.dispatchStream(stream, item);
           });
         } else if (this.paused && this.dispatcher) {
@@ -145,11 +141,21 @@ class MediaPlayer {
     }
   }
 
-  shuffle() {
-    console.log('fuckin magic shuffle');
+  public shuffle(): void {
+    let j: number;
+    let temp: MediaItem;
+
+    for (let i: number = this.queue.length - 1; i > 0; i -= 1) {
+      j = Math.floor(Math.random() * (i + 1));
+
+      temp = this.queue[j];
+
+      this.queue[j] = this.queue[i];
+      this.queue[i] = temp;
+    }
   }
 
-  stop() {
+  public stop(): void {
     if (this.playing && this.dispatcher) {
       const item = this.queue.first;
 
@@ -163,7 +169,7 @@ class MediaPlayer {
     }
   }
 
-  skip() {
+  public skip(): void {
     if (this.playing && this.dispatcher) {
       const item = this.queue.first;
 
@@ -181,7 +187,7 @@ class MediaPlayer {
     }
   }
 
-  pause() {
+  public pause(): void {
     if (this.playing && !this.paused && this.dispatcher) {
       this.dispatcher.pause();
 
@@ -191,19 +197,19 @@ class MediaPlayer {
     }
   }
 
-  move(currentIdx: number, targetIdx: number) {
+  public move(currentIdx: number, targetIdx: number): void {
     const max = this.queue.length - 1;
     const min = 0;
 
     const to = Math.min(Math.max(currentIdx, min), max);
     const from = Math.min(Math.max(targetIdx, min), max);
 
-    if (to != from) {
+    if (to !== from) {
       this.queue.move(to, from);
     }
   }
 
-  setVolume(volume: number) {
+  public setVolume(volume: number): void {
     this.config.stream.volume = Math.min(Math.max(volume / 100 + 0.5, 0.5), 2);
 
     if (this.dispatcher) {
@@ -211,21 +217,19 @@ class MediaPlayer {
     }
   }
 
-  getVolume() {
-    console.log(this.config.stream.volume);
-
+  public getVolume(): string {
     return `${+(this.config.stream.volume - 0.5) * 100}%`;
   }
 
-  remove(item: MediaItem) {
-    if (item == this.queue.first && (this.playing || this.paused)) this.stop();
+  public remove(item: MediaItem): void {
+    if (item === this.queue.first && (this.playing || this.paused)) this.stop();
 
     this.queue.dequeue(item);
 
     if (this.channel) this.channel.send(`:heavy_minus_sign: ${item.type} track removed: "${item.name}"`);
   }
 
-  clear() {
+  public clear(): void {
     if (this.playing || this.paused) this.stop();
 
     this.queue.clear();

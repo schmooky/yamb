@@ -3,14 +3,14 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 export interface BotConfig {
-  auto?: {
-    deafen?: boolean;
-    pause?: boolean;
-    play?: boolean;
-    reconnect?: boolean;
+  auto: {
+    deafen: boolean;
+    pause: boolean;
+    play: boolean;
+    reconnect: boolean;
   };
 
-  command?: {
+  command: {
     symbol: string;
   };
 

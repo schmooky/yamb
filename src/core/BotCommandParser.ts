@@ -132,49 +132,43 @@ export enum ResultCode {
   UNKNOWN_ERROR,
 }
 
-const codes = Object.freeze({
-  OK: 0,
-  BOT_USER: 1,
-  SELF_MESSAGE: 2,
-  NO_PREFIX_MATCH: 3,
-  NO_BODY: 4,
-  NO_APLHANUMERIC_AFTER_PREFIX: 5,
-  UNKNOWN_ERROR: 6,
-});
-
-function getCommandName(content: string) {
+function getCommandName(content: string): string | null {
   return content.split(/\s+/g)[0] || null;
 }
 
-function getArguments(str: string) {
+function getArguments(str: string): string[] {
   const args = [];
-  str = str.trim();
+  let string = str.trim();
 
-  while (str.length) {
+  while (string.length) {
     let arg;
-    if (str.startsWith('"') && str.indexOf('"', 1) > 0) {
-      arg = str.slice(1, str.indexOf('"', 1));
-      str = str.slice(str.indexOf('"', 1) + 1);
-    } else if (str.startsWith("'") && str.indexOf("'", 1) > 0) {
-      arg = str.slice(1, str.indexOf("'", 1));
-      str = str.slice(str.indexOf("'", 1) + 1);
-    } else if (str.startsWith('```') && str.indexOf('```', 3) > 0) {
-      arg = str.slice(3, str.indexOf('```', 3));
-      str = str.slice(str.indexOf('```', 3) + 3);
+    if (string.startsWith('"') && string.indexOf('"', 1) > 0) {
+      arg = string.slice(1, string.indexOf('"', 1));
+      string = string.slice(string.indexOf('"', 1) + 1);
+    } else if (string.startsWith("'") && string.indexOf("'", 1) > 0) {
+      arg = string.slice(1, string.indexOf("'", 1));
+      string = string.slice(string.indexOf("'", 1) + 1);
+    } else if (string.startsWith('```') && string.indexOf('```', 3) > 0) {
+      arg = string.slice(3, string.indexOf('```', 3));
+      string = string.slice(string.indexOf('```', 3) + 3);
     } else {
-      arg = str.split(/\s+/g)[0].trim();
-      str = str.slice(arg.length);
+      arg = string.split(/\s+/g)[0].trim();
+      string = string.slice(arg.length);
     }
 
     args.push(arg.trim());
-    str = str.trim();
+    string = str.trim();
   }
 
   return args;
 }
 
-export function parse<MT>(message: Message, prefix: string | string[], options: ParserOptions = {}): ParsedMessage<MT> | any {
-  function fail(error: string, code: ResultCode) {
+export function parse<MT>(
+  message: Message,
+  prefix: string | string[],
+  options: ParserOptions = {},
+): ParsedMessage<MT> | any {
+  function fail(error: string, code: ResultCode): any {
     const result = {
       success: false,
       message,
@@ -186,8 +180,10 @@ export function parse<MT>(message: Message, prefix: string | string[], options: 
     return result;
   }
 
-  if (typeof prefix === 'string') prefix = [prefix];
-  else prefix = [...prefix];
+  let symbol = prefix;
+
+  if (typeof prefix === 'string') symbol = [prefix];
+  else symbol = [...prefix];
 
   if (message.author.bot && !options.allowBots) {
     return fail('Message sent by a bot account.', ResultCode.BOT_USER);
@@ -201,20 +197,19 @@ export function parse<MT>(message: Message, prefix: string | string[], options: 
     return fail('Empty message body.', ResultCode.NO_BODY);
   }
 
-  let matchedPrefix = null;
+  let matchedPrefix = '';
 
-  for (const p of prefix) {
-    if (message.content.startsWith(p)) {
-      matchedPrefix = p;
-      break;
+  Object.values(symbol).forEach((value: string): void => {
+    if (message.content.startsWith(value)) {
+      matchedPrefix = value;
     }
-  }
+  });
 
   if (!matchedPrefix) {
     return fail('Message does not start with prefix.', ResultCode.NO_PREFIX_MATCH);
   }
 
-  const remaining = message.content.slice(matchedPrefix!.length);
+  const remaining = message.content.slice(matchedPrefix.length);
 
   if (remaining.length === 0) {
     return fail('No body after prefix.', ResultCode.NO_BODY);
@@ -224,13 +219,19 @@ export function parse<MT>(message: Message, prefix: string | string[], options: 
     return fail('Non alphanumeric character follows prefix.', ResultCode.NO_APLHANUMERIC_AFTER_PREFIX);
   }
 
+  const matched = remaining.match(/^[a-z0-9\-_.]+/i);
+
+  if (!matched) {
+    return fail('No matched', ResultCode.UNKNOWN_ERROR);
+  }
+
   const parsed: ParsedMessage = {
     success: true,
     code: ResultCode.OK,
-    command: remaining.match(/^[a-z0-9\-_\.]+/i)![0],
-    prefix: matchedPrefix!,
+    command: matched[0],
+    prefix: matchedPrefix,
     arguments: getArguments(remaining),
-    body: remaining.slice(remaining.match(/^[a-z0-9\-_\.]+/i)![0].length).trim(),
+    body: remaining.slice(matched[0].length).trim(),
     message,
   };
 

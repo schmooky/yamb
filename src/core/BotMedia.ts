@@ -1,5 +1,3 @@
-import { Readable } from 'stream';
-
 export interface MediaItem {
   type: string;
   url: string;

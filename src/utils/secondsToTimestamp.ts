@@ -1,26 +1,9 @@
-const secondsToTimestamp = (duration: number): string => {
-  const hours = Math.floor(duration / 3600);
-  const minutes = Math.floor((duration - hours * 3600) / 60);
-  const seconds = duration - hours * 3600 - minutes * 60;
+const secondsToTimestamp = (time: number): string => {
+  const seconds = `0${time % 60}`.slice(-2);
+  const minutes = `0${Math.trunc(time / 60) % 60}`.slice(-2);
+  const hours = `0${Math.trunc(time / 60 / 60) % 24}`.slice(-2);
 
-  let timestamp = '';
-
-  if (hours) {
-    timestamp = `${hours}:`;
-  }
-
-  if (minutes || timestamp !== '') {
-    timestamp += `${(minutes < 10 && timestamp === '') ? `0${minutes}` : minutes}:`;
-  }
-
-  if (timestamp === '') {
-    timestamp = `${seconds}s`;
-  } else {
-    timestamp += seconds < 10 ? `0${seconds}` : seconds;
-  }
-
-  return timestamp;
+  return `${hours}:${minutes}:${seconds}`;
 };
-
 
 export default secondsToTimestamp;

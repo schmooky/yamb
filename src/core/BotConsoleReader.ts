@@ -5,32 +5,32 @@ import logger from '../utils/logger';
 
 
 class BotConsoleReader {
-  commands: BotCommandMap;
+  public commands: BotCommandMap;
 
-  constructor() {
+  public constructor() {
     this.commands = new BotCommandMap();
   }
 
-  listen() {
+  public listen(): void {
     const rl = readline.createInterface({
       input: process.stdin,
       output: process.stdout,
     });
 
-    rl.on('line', (input) => {
+    rl.on('line', (input): void => {
       if (!input) return;
 
       const parts = input.split(' ');
       const result = minimist(parts);
 
-      if (this.commands.has(result._[0])) {
-        const cmds = this.commands.get(result._[0]);
+      const cmds = this.commands.get(result._[0]);
 
-        cmds!.forEach(cmd => cmd(result, rl));
+      if (cmds) {
+        cmds.forEach((cmd): void => cmd(result, rl));
       }
     });
 
-    rl.on('close', () => {
+    rl.on('close', (): void => {
       logger.debug('Console Reader Disconnected');
     });
   }

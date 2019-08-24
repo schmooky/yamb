@@ -17,7 +17,8 @@
   "rules": {
     "max-len": ["error", 120],
     "@typescript-eslint/indent": ["error", 2],
-    "jest/no-empty-title": ["error"]
+    "jest/no-empty-title": ["error"],
+    "no-param-reassign": ["error", { "props": true, "ignorePropertyModificationsFor": ["bot"] }]
   },
   "settings": {
     "import/resolver": {

@@ -1,28 +1,27 @@
-import fs from 'fs';
-import { Message } from 'discord.js';
-import request from 'request';
-import {
-  Bot, BotPlugin, MediaItem, ParsedMessage,
-} from '../resources';
+/* eslint-disable class-methods-use-this */
 
+import { Message } from 'discord.js';
+
+import { Bot, BotPlugin } from '../core/BotInterface';
+import { ParsedMessage } from '../core/BotCommandParser';
+import { MediaItem } from '../core/BotMedia';
 
 import trackService from '../services/track.service';
-import { isYandexURL } from '../utils/isURL';
 import secondsToTimestamp from '../utils/secondsToTimestamp';
+import { isYandexURL } from '../utils/isURL';
 
 const yamusicType = 'yamusic';
 
 export default class YamusicPlugin implements BotPlugin {
-  preInitialize(bot: Bot): void {
-    bot.helptext += '\n`yandex [url/idfragment]` - Add yandex audio to the queue\n';
-    const { player } = bot;
+  public preInitialize(bot: Bot): void {
+    bot.helptext += '\n`yamusic [url/idfragment]` - Add yandex audio to the queue\n';
 
-    bot.commands.on(yamusicType, (cmd: ParsedMessage, msg: Message) => {
+    bot.commands.on(yamusicType, (cmd: ParsedMessage, msg: Message): void => {
       if (cmd.arguments.length > 0) {
-        cmd.arguments.forEach(async (arg) => {
+        cmd.arguments.forEach(async (arg: string): Promise<void> => {
           if (isYandexURL(arg)) {
             const [track] = await trackService.findTracksByURL(arg);
-            player.addMedia({
+            bot.player.addMedia({
               type: yamusicType,
               url: track.trackURL,
               duration: secondsToTimestamp((Math.floor(track.durationMs / 1000))),
@@ -34,8 +33,8 @@ export default class YamusicPlugin implements BotPlugin {
       }
     });
 
-    player.typeRegistry.set(yamusicType, {
-      getDetails: async (item: MediaItem) => {
+    bot.player.typeRegistry.set(yamusicType, {
+      getDetails: async (item: MediaItem): Promise<MediaItem> => {
         const [track] = await trackService.findTracksByURL(item.url);
 
         const media = {
@@ -44,17 +43,15 @@ export default class YamusicPlugin implements BotPlugin {
           url: track.trackURL,
         };
 
-        console.trace(media.url);
-
         return media;
       },
-      getStream: (item: MediaItem) => new Promise((resolve, reject) => {
+      getStream: (item: MediaItem): Promise<string> => new Promise((resolve, reject): void => {
         const input = item.url;
         if (input) resolve(input);
-        else reject('Unable to get media input');
+        else reject(Error('Unable to get media input'));
       }),
     });
   }
 
-  postInitialize(bot: Bot): void {}
+  public postInitialize(): void {}
 }

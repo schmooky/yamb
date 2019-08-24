@@ -1,4 +1,4 @@
-import { MediaItem, MediaType } from './BotMedia';
+import { MediaItem } from './BotMedia';
 
 class MediaQueue extends Array<MediaItem> {
   public get first(): MediaItem {
@@ -23,7 +23,9 @@ class MediaQueue extends Array<MediaItem> {
 
       return item;
     }
-    return this.shift()!; //! FIXME: catch undefined
+
+    // @ts-ignore
+    return this.shift(); //! FIXME: catch undefined
   }
 
   public shuffle(): void {
@@ -42,7 +44,7 @@ class MediaQueue extends Array<MediaItem> {
     this.length = 0;
   }
 
-  public move(to: number, from: number) {
+  public move(to: number, from: number): void {
     if (to !== from) {
       this.splice(to, 0, this.splice(from, 1)[0]);
     }

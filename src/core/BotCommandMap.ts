@@ -1,7 +1,12 @@
 class BotCommandMap extends Map<string, Function[]> {
   public on(cmd: string, handler: Function): this {
-    if (!this.has(cmd)) this.set(cmd, [handler]);
-    else this.get(cmd)!.push(handler);
+    const command = this.get(cmd);
+
+    if (!command) {
+      this.set(cmd, [handler]);
+    } else {
+      command.push(handler);
+    }
 
     return this;
   }

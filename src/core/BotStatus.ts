@@ -3,11 +3,11 @@ import { Client, PresenceStatus } from 'discord.js';
 class BotStatus {
   private client: Client;
 
-  constructor(client: Client) {
+  public constructor(client: Client) {
     this.client = client;
   }
 
-  setBanner(status: string) {
+  public setBanner(status: string): void {
     this.client.user.setPresence({
       game: {
         name: status,
@@ -15,7 +15,7 @@ class BotStatus {
     });
   }
 
-  setActivity(activity: PresenceStatus) {
+  public setActivity(activity: PresenceStatus): void {
     this.client.user.setStatus(activity);
   }
 }

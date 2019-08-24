@@ -1,19 +1,20 @@
 import DefaultBotConfig from './core/BotConfig';
 
-import { logger, BotConfig, YBot } from './resources';
+import logger from './utils/logger';
+import YBot from './core/Bot';
 
 const bot = new YBot(DefaultBotConfig);
 
 bot
   .connect()
-  .then(() => {
+  .then((): void => {
     logger.debug('Bot Ready');
 
     console.log('Bot Online');
 
     bot.listen();
   })
-  .catch((err) => {
+  .catch((err: Error): void => {
     console.log(err);
 
     logger.error(err);
