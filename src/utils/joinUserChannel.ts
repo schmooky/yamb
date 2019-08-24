@@ -5,7 +5,7 @@ const joinUserChannel = (msg: Message): Promise<VoiceConnection> => new Promise(
 
   if (channel && channel.type === 'voice') {
     channel.join().then((connection): void => resolve(connection));
-  } else reject(Error('User isn\'t on a voice channel!'));
+  } else reject(Error('You are not in voice channel'));
 });
 
 export default joinUserChannel;

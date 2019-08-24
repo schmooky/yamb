@@ -32,6 +32,7 @@
     "minimist": "^1.2.0",
     "node-opus": "^0.3.2",
     "pino": "^5.13.2",
+    "pino-tee": "^0.2.2",
     "yandex-music-api": "0.0.3"
   },
   "devDependencies": {
@@ -53,7 +54,6 @@
     "husky": "^2.7.0",
     "jest": "^24.8.0",
     "lint-staged": "^9.2.0",
-    "pino-tee": "^0.2.2",
     "rimraf": "^2.6.3",
     "ts-jest": "^24.0.2",
     "ts-node": "^8.3.0",

@@ -25,8 +25,10 @@ import add from '../api/add';
 import clear from '../api/clear';
 import move from '../api/move';
 import pause from '../api/pause';
+import np from '../api/np';
 import shuffle from '../api/shuffle';
 import repeat from '../api/repeat';
+import remove from '../api/remove';
 import skip from '../api/skip';
 import time from '../api/time';
 import volume from '../api/volume';
@@ -77,7 +79,9 @@ class YBot implements Bot {
       .on('move', (cmd: ParsedMessage, msg: Message): Promise<void> => move(cmd, msg, this))
       .on('pause', (cmd: ParsedMessage, msg: Message): Promise<void> => pause(cmd, msg, this))
       .on('repeat', (cmd: ParsedMessage, msg: Message): Promise<void> => repeat(cmd, msg, this))
+      .on('remove', (cmd: ParsedMessage, msg: Message): Promise<void> => remove(cmd, msg, this))
       .on('skip', (cmd: ParsedMessage, msg: Message): Promise<void> => skip(cmd, msg, this))
+      .on('np', (cmd: ParsedMessage, msg: Message): Promise<void> => np(cmd, msg, this))
       .on('shuffle', (cmd: ParsedMessage, msg: Message): Promise<void> => shuffle(cmd, msg, this))
       .on('time', (cmd: ParsedMessage, msg: Message): Promise<void> => time(cmd, msg, this))
       .on('volume', (cmd: ParsedMessage, msg: Message): Promise<void> => volume(cmd, msg, this))

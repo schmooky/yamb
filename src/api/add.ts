@@ -2,21 +2,26 @@ import { Message } from 'discord.js';
 
 import { Bot } from '../core/BotInterface';
 import { ParsedMessage } from '../core/BotCommandParser';
+import { MediaItem } from '../core/BotMedia';
 
 import trackService from '../services/track.service';
 
 const add = async (cmd: ParsedMessage, msg: Message, bot: Bot): Promise<void> => {
-  if (cmd.arguments.length > 0) {
-    cmd.arguments.forEach(async (arg): Promise<void> => {
-      const parts = arg.split(':');
+  const args = cmd.arguments.join(' ');
 
-      if (parts.length === 2) {
-        const [track] = await trackService.findTracksByURL(parts[1]);
+  if (args) {
+    const [track] = await trackService.findTracksByURL(args);
 
-        bot.player.addMedia({ type: parts[0], url: track.trackURL, requestor: msg.author.username });
-      } else msg.channel.send('Invalid type format');
-    });
-  }
+    const media: MediaItem = {
+      type: 'yamusic',
+      url: track.trackURL,
+      name: track.title,
+      duration: (track.durationMs / 1000).toFixed(0),
+      requestor: msg.author.username,
+    };
+
+    bot.player.addMedia(media);
+  } else msg.channel.send('Invalid type format');
 };
 
 export default add;
