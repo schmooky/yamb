@@ -44,8 +44,8 @@ class MediaQueue extends Array<MediaItem> {
     this.length = 0;
   }
 
-  public move(to: number, from: number): void {
-    if (to !== from) {
+  public move(from: number, to: number): void {
+    if (from !== to) {
       this.splice(to, 0, this.splice(from, 1)[0]);
     }
   }

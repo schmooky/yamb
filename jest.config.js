@@ -10,6 +10,7 @@ module.exports = {
   },
   transformIgnorePatterns: [
     '/node_modules/',
+    '/dist/',
   ],
   testMatch: ['**/*.{spec,test}.{js,ts}'],
   testEnvironment: 'node',
