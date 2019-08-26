@@ -29,14 +29,16 @@ class MediaQueue extends Array<MediaItem> {
   }
 
   public shuffle(): void {
-    let m: number = this.length;
-    let i: number;
+    let j: number;
+    let temp: MediaItem;
 
-    while (m) {
-      i = Math.floor(Math.random() * m);
-      m -= 1;
+    for (let i: number = this.length - 1; i > 0; i -= 1) {
+      j = Math.floor(Math.random() * (i + 1));
 
-      [this[m], this[i]] = [this[i], this[m]];
+      temp = this[j];
+
+      this[j] = this[i];
+      this[i] = temp;
     }
   }
 

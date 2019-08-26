@@ -5,9 +5,9 @@ import { ParsedMessage } from '../core/BotCommandParser';
 
 const move = async (cmd: ParsedMessage, msg: Message, bot: Bot): Promise<void> => {
   if (cmd.arguments.length > 1) {
-    const current = Math.min(Math.max(parseInt(cmd.arguments[0], 10), 0), bot.player.queue.length - 1);
+    const current = Math.max(parseInt(cmd.arguments[0], 10), 0);
 
-    const targetDesc = cmd.arguments[0];
+    const targetDesc = cmd.arguments[1];
 
     let target = 0;
 

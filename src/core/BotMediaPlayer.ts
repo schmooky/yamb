@@ -142,17 +142,7 @@ class MediaPlayer {
   }
 
   public shuffle(): void {
-    let j: number;
-    let temp: MediaItem;
-
-    for (let i: number = this.queue.length - 1; i > 0; i -= 1) {
-      j = Math.floor(Math.random() * (i + 1));
-
-      temp = this.queue[j];
-
-      this.queue[j] = this.queue[i];
-      this.queue[i] = temp;
-    }
+    this.queue.shuffle();
   }
 
   public stop(): void {
@@ -201,12 +191,10 @@ class MediaPlayer {
     const max = this.queue.length - 1;
     const min = 0;
 
-    const to = Math.min(Math.max(currentIdx, min), max);
-    const from = Math.min(Math.max(targetIdx, min), max);
+    const from = Math.min(Math.max(currentIdx, min), max);
+    const to = Math.min(Math.max(targetIdx, min), max);
 
-    if (to !== from) {
-      this.queue.move(to, from);
-    }
+    this.queue.move(from, to);
   }
 
   public setVolume(volume: number): void {
