@@ -1,7 +1,7 @@
 import secondsToTimestamp from '../secondsToTimestamp';
 
 describe('secondsToTimestamp', (): void => {
-  it('should be convert seconds correctly', (): void => {
+  it('should convert seconds correctly', (): void => {
     const seconds = 54;
     const minutes = 354;
     const hours = 6804;

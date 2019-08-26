@@ -1,32 +1,32 @@
 import BotMediaQueue from '../BotMediaQueue';
 import { MediaItem } from '../BotMedia';
 
-const items = [
-  {
-    type: 'music',
-    url: 'someurl.com/1',
-    name: 'Joe',
-  },
-  {
-    type: 'music',
-    url: 'someurl.com/2',
-    name: 'Joe',
-  },
-  {
-    type: 'music',
-    url: 'someurl.com/3',
-    name: 'Joe',
-  },
-];
-
 describe('BotMediaQueue', (): void => {
+  const items = [
+    {
+      type: 'music',
+      url: 'someurl.com/1',
+      name: 'Joe',
+    },
+    {
+      type: 'music',
+      url: 'someurl.com/2',
+      name: 'Joe',
+    },
+    {
+      type: 'music',
+      url: 'someurl.com/3',
+      name: 'Joe',
+    },
+  ];
+
   let MediaQueue: BotMediaQueue;
 
   beforeEach((): void => {
     MediaQueue = new BotMediaQueue();
   });
 
-  it('should be return the first element', (): void => {
+  it('should return the first element', (): void => {
     MediaQueue.enqueue(items[0]);
     MediaQueue.enqueue(items[1]);
     MediaQueue.enqueue(items[2]);
@@ -34,7 +34,7 @@ describe('BotMediaQueue', (): void => {
     expect(MediaQueue.first).toBe(items[0]);
   });
 
-  it('should be return the last element', (): void => {
+  it('should return the last element', (): void => {
     MediaQueue.enqueue(items[0]);
     MediaQueue.enqueue(items[1]);
     MediaQueue.enqueue(items[2]);
@@ -42,7 +42,7 @@ describe('BotMediaQueue', (): void => {
     expect(MediaQueue.last).toBe(items[2]);
   });
 
-  it('should be add element to the queue', (): void => {
+  it('should add element to the queue', (): void => {
     const media: MediaItem = {
       type: 'music',
       url: 'someurl.com/1',
@@ -56,7 +56,7 @@ describe('BotMediaQueue', (): void => {
     expect(MediaQueue).toStrictEqual(expected);
   });
 
-  it('should be remove the first element if arguments no provided', (): void => {
+  it('should remove the first element if arguments no provided', (): void => {
     MediaQueue.enqueue(items[0]);
     MediaQueue.enqueue(items[1]);
     MediaQueue.enqueue(items[2]);
@@ -65,7 +65,7 @@ describe('BotMediaQueue', (): void => {
     expect(MediaQueue).toStrictEqual(new BotMediaQueue(items[1], items[2]));
   });
 
-  it('should be remove element by item', (): void => {
+  it('should remove element by item', (): void => {
     MediaQueue.enqueue(items[0]);
     MediaQueue.enqueue(items[1]);
     MediaQueue.enqueue(items[2]);
@@ -74,7 +74,7 @@ describe('BotMediaQueue', (): void => {
     expect(MediaQueue).toStrictEqual(new BotMediaQueue(items[0], items[2]));
   });
 
-  it('should be not remove element if item does not exist', (): void => {
+  it('shouldn\'t remove element if item does not exist', (): void => {
     const unknownMedia: MediaItem = {
       type: 'music',
       url: 'someunknownmusic.com/1',
@@ -88,21 +88,20 @@ describe('BotMediaQueue', (): void => {
     expect(MediaQueue).toStrictEqual(new BotMediaQueue(...items));
   });
 
-  it('should be shuffle items', (): void => {
-    MediaQueue.enqueue(items[0]);
-    MediaQueue.enqueue(items[1]);
-    MediaQueue.enqueue(items[2]);
-
+  it('should shuffle items', (): void => {
+    const Queue = new BotMediaQueue(...items);
     const AnotherQueue = new BotMediaQueue(...items);
 
-    expect(MediaQueue).toStrictEqual(AnotherQueue);
+    expect(Queue[0]).toEqual(AnotherQueue[0]);
 
-    MediaQueue.shuffle();
+    Queue.shuffle();
 
-    expect(MediaQueue).not.toStrictEqual(AnotherQueue);
+    const isShuffled = Queue.some((item, index): boolean => item !== AnotherQueue[index]);
+
+    expect(isShuffled).toBeTruthy();
   });
 
-  it('should be move items', (): void => {
+  it('should move items', (): void => {
     MediaQueue.enqueue(items[0]);
     MediaQueue.enqueue(items[1]);
     MediaQueue.enqueue(items[2]);
@@ -112,7 +111,7 @@ describe('BotMediaQueue', (): void => {
     expect(MediaQueue[2]).toBe(items[0]);
   });
 
-  it('should be no move items if arguments is equal', (): void => {
+  it('shouldn\'t move items if arguments is equal', (): void => {
     MediaQueue.enqueue(items[0]);
     MediaQueue.enqueue(items[1]);
     MediaQueue.enqueue(items[2]);
@@ -122,7 +121,7 @@ describe('BotMediaQueue', (): void => {
     expect(MediaQueue[0]).toBe(items[0]);
   });
 
-  it('should be clear the queue', (): void => {
+  it('should clear the queue', (): void => {
     MediaQueue.enqueue(items[0]);
     MediaQueue.enqueue(items[1]);
     MediaQueue.enqueue(items[2]);
