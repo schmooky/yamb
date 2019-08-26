@@ -14,7 +14,7 @@ const join = async (cmd: ParsedMessage, msg: Message, bot: Bot): Promise<void> =
 
     if (bot.config.auto.play) bot.player.play();
   } catch (error) {
-    msg.channel.send(error);
+    msg.channel.send(error.message);
   }
 };
 

@@ -8,11 +8,17 @@ const stop = async (cmd: ParsedMessage, msg: Message, bot: Bot): Promise<void> =
 
   bot.player.connection = undefined;
 
-  bot.client.voiceConnections.forEach((connection): void => {
-    connection.disconnect();
+  const connection = bot.client.voiceConnections.get(msg.guild.id);
 
-    msg.channel.send(`:mute: Disconnecting from channel: ${connection.channel.name}`);
-  });
+  if (!connection) {
+    msg.channel.send('I can\'t find a voice connection');
+
+    return;
+  }
+
+  connection.disconnect();
+
+  msg.channel.send(`:mute: Disconnecting from channel: ${connection.channel.name}`);
 };
 
 export default stop;

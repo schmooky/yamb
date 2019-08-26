@@ -136,7 +136,6 @@ function getCommandName(content: string): string | null {
   return content.split(/\s+/g)[0] || null;
 }
 
-/* eslint-disable */
 function getArguments(str: string): string[] {
   const input = str.trim();
 
@@ -145,13 +144,11 @@ function getArguments(str: string): string[] {
   return args;
 }
 
-/* eslint-enable */
-
 export function parse<MT>(
   message: Message,
   prefix: string | string[],
   options: ParserOptions = {},
-): ParsedMessage<MT> | any {
+): ParsedMessage<MT> {
   function fail(error: string, code: ResultCode): any {
     const result = {
       success: false,

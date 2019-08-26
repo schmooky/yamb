@@ -33,8 +33,6 @@ import skip from '../api/skip';
 import time from '../api/time';
 import volume from '../api/volume';
 
-const pingPhrases = ['Can\'t stop won\'t stop!', ':ping_pong: Pong Bitch!'];
-
 const random = (array: string[]): string => array[Math.floor(Math.random() * array.length)];
 
 class YBot implements Bot {
@@ -64,28 +62,28 @@ class YBot implements Bot {
 
     this.commands = new BotCommandMap()
       .on('ping', (cmd: ParsedMessage, msg: Message): void => {
-        let phrases = pingPhrases.slice();
+        let phrases = ['Can\'t stop won\'t stop!', ':ping_pong: Pong Bitch!'];
 
         if (msg.guild) phrases = phrases.concat(msg.guild.emojis.array().map((x): string => x.name));
 
-        msg.channel.send(random(phrases));
+        msg.channel.send(`${this.client.ping}ms, :${random(phrases)}:`);
       })
-      .on('help', (cmd: ParsedMessage, msg: Message): Promise<void> => help(cmd, msg, this))
-      .on('join', (cmd: ParsedMessage, msg: Message): Promise<void> => join(cmd, msg, this))
-      .on('list', (cmd: ParsedMessage, msg: Message): Promise<void> => list(cmd, msg, this))
-      .on('play', (cmd: ParsedMessage, msg: Message): Promise<void> => play(cmd, msg, this))
-      .on('add', (cmd: ParsedMessage, msg: Message): Promise<void> => add(cmd, msg, this))
-      .on('clear', (cmd: ParsedMessage, msg: Message): Promise<void> => clear(cmd, msg, this))
-      .on('move', (cmd: ParsedMessage, msg: Message): Promise<void> => move(cmd, msg, this))
-      .on('pause', (cmd: ParsedMessage, msg: Message): Promise<void> => pause(cmd, msg, this))
-      .on('repeat', (cmd: ParsedMessage, msg: Message): Promise<void> => repeat(cmd, msg, this))
-      .on('remove', (cmd: ParsedMessage, msg: Message): Promise<void> => remove(cmd, msg, this))
-      .on('skip', (cmd: ParsedMessage, msg: Message): Promise<void> => skip(cmd, msg, this))
-      .on('np', (cmd: ParsedMessage, msg: Message): Promise<void> => np(cmd, msg, this))
-      .on('shuffle', (cmd: ParsedMessage, msg: Message): Promise<void> => shuffle(cmd, msg, this))
-      .on('time', (cmd: ParsedMessage, msg: Message): Promise<void> => time(cmd, msg, this))
-      .on('volume', (cmd: ParsedMessage, msg: Message): Promise<void> => volume(cmd, msg, this))
-      .on('stop', (cmd: ParsedMessage, msg: Message): Promise<void> => stop(cmd, msg, this));
+      .on('help', help)
+      .on('join', join)
+      .on('list', list)
+      .on('play', play)
+      .on('add', add)
+      .on('clear', clear)
+      .on('move', move)
+      .on('pause', pause)
+      .on('repeat', repeat)
+      .on('remove', remove)
+      .on('skip', skip)
+      .on('np', np)
+      .on('shuffle', shuffle)
+      .on('time', time)
+      .on('volume', volume)
+      .on('stop', stop);
 
     this.client = new Client()
       .on('message', (msg: Message): void => {
@@ -101,7 +99,7 @@ class YBot implements Bot {
           this.player.channel = msg.channel;
 
           handlers.forEach((handle): void => {
-            handle(parsed, msg);
+            handle(parsed, msg, this);
           });
         }
       })
