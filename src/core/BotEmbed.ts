@@ -47,8 +47,34 @@ const embedList = (queue: BotMediaQueue): RichEmbed => {
   return embed;
 };
 
+const embedHelp = (): RichEmbed => {
+  const embed = new RichEmbed()
+    .setTitle('Help')
+    .setColor('#ffdb4d')
+    .addField('Add new track to queue', '```css\n~add [yandex.music track url]\n```')
+    .addField('Clear queue', '```css\n~clear\n```')
+    .addField('Show help', '```css\n~help\n```')
+    .addField('Join voice channel', '```css\n~join\n```')
+    .addField('Show queue', '```css\n~list\n```')
+    .addField('Move track in queue to different position', '```css\n~move [current position in queue] [target position in queue]\n```')
+    .addField('Show currently playing track', '```css\n~np\n```')
+    .addField('Pause player', '```css\n~pause\n```')
+    .addField('Start or resume player', '```css\n~play\n```')
+    .addField('Remove track from queue', '```css\n~remove [position in queue]\n```')
+    .addField('Toggle repeat', '```css\n~repeat\n```')
+    .addField('Shuffle queue', '```css\n~shuffle\n```')
+    .addField('Skip currently playing track', '```css\n~skip\n```')
+    .addField('Stop player', '```css\n~stop\n```')
+    .addField('Show duration of currently playing track', '```css\n~time\n```')
+    .addField('Show or change player volume', '```css\n~volume\n~volume [new volume]\n```')
+    .setFooter('Яндекс.Музыка©', logoYandexMusicURL);
+
+  return embed;
+};
+
 export {
   embedTrackAdded,
   embedNowPlaying,
   embedList,
+  embedHelp,
 };
