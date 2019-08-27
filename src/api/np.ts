@@ -12,7 +12,7 @@ const np = async (cmd: ParsedMessage, msg: Message, bot: Bot): Promise<void> => 
     return;
   }
 
-  msg.channel.send(embedNowPlaying(bot.player.queue.first));
+  msg.channel.send(embedNowPlaying(nowPlaying));
 };
 
 export default np;

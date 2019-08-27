@@ -6,15 +6,20 @@ import { ParsedMessage } from '../core/BotCommandParser';
 import { embedList } from '../core/BotEmbed';
 
 const list = async (cmd: ParsedMessage, msg: Message, bot: Bot): Promise<void> => {
-  if (bot.player.queue.length > 0) {
-    const queuePageCount = Math.ceil(bot.player.queue.length / 10);
-    const parsedcmd = parseInt(cmd.arguments[0], 10);
+  const { queue } = bot.player;
+  if (queue.length > 0) {
+    const requestedPage = parseInt(cmd.arguments[0], 10);
+    if (!Number.isNaN(requestedPage) || !cmd.arguments[0]) {
+      const queuePageCount = Math.ceil(queue.length / 10);
 
-    let exactpage = parsedcmd ? parsedcmd - 1 : 0;
-    exactpage = exactpage < queuePageCount ? exactpage : queuePageCount;
+      let exactpage = requestedPage ? requestedPage - 1 : 0;
+      exactpage = exactpage < queuePageCount ? exactpage : queuePageCount;
 
-    msg.channel.send(embedList(bot.player.queue, exactpage));
-  } else msg.channel.send('❌ There are no songs in the queue.');
+      msg.channel.send(embedList(queue, exactpage));
+    } else {
+      msg.channel.send('❌ Wrong page number');
+    }
+  } else msg.channel.send('❌ There are no songs in the queue');
 };
 
 export default list;
