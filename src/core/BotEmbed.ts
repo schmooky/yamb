@@ -34,13 +34,17 @@ const embedNowPlaying = (track: MediaItem): RichEmbed => {
   return embed;
 };
 
-const embedList = (queue: BotMediaQueue): RichEmbed => {
+const embedList = (queue: BotMediaQueue, page: number): RichEmbed => {
+  const tracksPerPage = 10;
+  const pageStart = tracksPerPage * page;
+  const pageEnd = tracksPerPage * (page + 1);
+
   const embed = new RichEmbed()
-    .setTitle(`There are ${queue.length} tracks in queue`)
+    .setTitle(`There are ${queue.length} tracks in queue, displaying page ${page + 1}`)
     .setColor('#ffdb4d')
     .setFooter('Яндекс.Музыка©', logoYandexMusicURL);
 
-  queue.slice(0, 10).forEach((item) => {
+  queue.slice(pageStart, pageEnd).forEach((item) => {
     embed.addField(`${item.name} by ${item.artists[0].name}`, `Requested by ${item.requestor.username}`);
   });
 
@@ -55,7 +59,7 @@ const embedHelp = (): RichEmbed => {
     .addField('Clear queue', '```css\n~clear\n```')
     .addField('Show help', '```css\n~help\n```')
     .addField('Join voice channel', '```css\n~join\n```')
-    .addField('Show queue', '```css\n~list\n```')
+    .addField('Show first 10 tracks of queue or exact page', '```css\n~list\n~list [page number]\n```')
     .addField('Move track in queue to different position', '```css\n~move [current position in queue] [target position in queue]\n```')
     .addField('Show currently playing track', '```css\n~np\n```')
     .addField('Pause player', '```css\n~pause\n```')
