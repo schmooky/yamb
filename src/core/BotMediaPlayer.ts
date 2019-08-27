@@ -8,6 +8,8 @@ import { BotConfig } from './BotConfig';
 import { MediaItem, MediaType } from './BotMedia';
 import MediaQueue from './BotMediaQueue';
 
+import { embedTrackAdded } from './BotEmbed';
+
 import logger from '../utils/logger';
 
 class MediaPlayer {
@@ -43,9 +45,7 @@ class MediaPlayer {
       this.queue.enqueue(item);
 
       if (this.channel && item) {
-        this.channel.send(
-          `:dvd: ${item.type} track added: "${item.name}" - #${this.queue.indexOf(item) + 1}`,
-        );
+        this.channel.send(embedTrackAdded(item));
       }
     } else if (this.channel) this.channel.send('Error adding track: Unknown Media Type!');
   }

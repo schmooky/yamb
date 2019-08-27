@@ -2,6 +2,7 @@ import { Message } from 'discord.js';
 
 import { Bot } from '../core/BotInterface';
 import { ParsedMessage } from '../core/BotCommandParser';
+import { embedNowPlaying } from '../core/BotEmbed';
 
 const np = async (cmd: ParsedMessage, msg: Message, bot: Bot): Promise<void> => {
   const nowPlaying = bot.player.queue.first;
@@ -12,7 +13,7 @@ const np = async (cmd: ParsedMessage, msg: Message, bot: Bot): Promise<void> => 
     return;
   }
 
-  msg.channel.send(`Now playing: ${nowPlaying.name}`);
+  msg.channel.send(embedNowPlaying(bot.player.queue.first));
 };
 
 export default np;

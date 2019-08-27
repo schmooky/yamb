@@ -16,8 +16,8 @@ const add = async (cmd: ParsedMessage, msg: Message, bot: Bot): Promise<void> =>
       type: 'yamusic',
       url: track.trackURL,
       name: track.title,
-      duration: (track.durationMs / 1000).toFixed(0),
-      requestor: msg.author.username,
+      duration: parseInt((track.durationMs / 1000).toFixed(0), 10),
+      requestor: msg.author,
       albums: track.albums,
       artists: track.artists,
     };
