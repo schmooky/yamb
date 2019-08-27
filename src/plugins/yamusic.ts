@@ -20,7 +20,7 @@ export default class YamusicPlugin implements BotPlugin {
       if (cmd.arguments.length > 0) {
         cmd.arguments.forEach(async (arg: string): Promise<void> => {
           if (isYandexURL(arg)) {
-            const [track] = await trackService.findTracksByURL(arg);
+            const [track] = await trackService.fetchTracksByURL(arg);
             bot.player.addMedia({
               type: yamusicType,
               url: track.trackURL,
@@ -35,7 +35,7 @@ export default class YamusicPlugin implements BotPlugin {
 
     bot.player.typeRegistry.set(yamusicType, {
       getDetails: async (item: MediaItem): Promise<MediaItem> => {
-        const [track] = await trackService.findTracksByURL(item.url);
+        const [track] = await trackService.fetchTracksByURL(item.url);
 
         const media = {
           type: 'yamusic',

@@ -133,6 +133,8 @@ class YBot implements Bot {
       if (this.client) this.client.destroy();
 
       rl.close();
+
+      process.exit(0);
     });
 
     this.status = new BotStatus(this.client);

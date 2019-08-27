@@ -10,7 +10,7 @@ const add = async (cmd: ParsedMessage, msg: Message, bot: Bot): Promise<void> =>
   const args = cmd.arguments.join(' ');
 
   if (args) {
-    const [track] = await trackService.findTracksByURL(args);
+    const [track] = await trackService.fetchTracksByURL(args);
 
     const media: MediaItem = {
       type: 'yamusic',
