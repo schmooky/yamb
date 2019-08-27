@@ -8,7 +8,7 @@ import { BotConfig } from './BotConfig';
 import { MediaItem, MediaType } from './BotMedia';
 import MediaQueue from './BotMediaQueue';
 
-import { embedTrackAdded } from './BotEmbed';
+import { embedTrackAdded, embedNowPlaying } from './BotEmbed';
 
 import logger from '../utils/logger';
 
@@ -47,7 +47,7 @@ class MediaPlayer {
       if (this.channel && item) {
         this.channel.send(embedTrackAdded(item));
       }
-    } else if (this.channel) this.channel.send('Error adding track: Unknown Media Type!');
+    } else if (this.channel) this.channel.send('❌ Error adding track: Unknown Media Type!');
   }
 
   public at(idx: number): MediaItem {
@@ -75,7 +75,7 @@ class MediaPlayer {
       this.playing = true;
 
       if (this.channel) {
-        this.channel.send(`:musical_note: Now playing: "${item.name}", Requested by: ${item.requestor}`);
+        this.channel.send(embedNowPlaying(item));
       }
     });
 
@@ -88,7 +88,7 @@ class MediaPlayer {
 
       logger.error(err);
 
-      if (this.channel) this.channel.send(`Error Playing Song: ${err}`);
+      if (this.channel) this.channel.send(`❌ Error Playing Song: ${err}`);
     });
 
     this.dispatcher.on('end', (reason: string): void => {
@@ -113,11 +113,11 @@ class MediaPlayer {
 
   public play(): void {
     if (this.queue.length === 0 && this.channel) {
-      this.channel.send('Queue is empty! Add some songs!');
+      this.channel.send('❌ Queue is empty! Add some songs!');
     }
 
     if (this.playing && !this.paused && this.channel) {
-      this.channel.send('Already playing a song!');
+      this.channel.send('❌ Already playing a song!');
     }
 
     const item = this.queue.first;
@@ -135,7 +135,7 @@ class MediaPlayer {
 
           this.paused = false;
 
-          if (this.channel) this.channel.send(`:play_pause: "${this.queue.first.name}" resumed`);
+          if (this.channel) this.channel.send(`⏯ **${this.queue.first.name}** resumed`);
         }
       }
     }
@@ -155,7 +155,7 @@ class MediaPlayer {
 
       this.dispatcher.end();
 
-      if (this.channel) this.channel.send(`:stop_button: "${item.name}" stopped`);
+      if (this.channel) this.channel.send(`⏹ **${item.name}** stopped`);
     }
   }
 
@@ -167,13 +167,13 @@ class MediaPlayer {
 
       this.dispatcher.end();
 
-      if (this.channel) this.channel.send(`:fast_forward: "${item.name}" skipped`);
+      if (this.channel) this.channel.send(`⏭ **${item.name}** skipped`);
     } else if (this.queue.length > 0) {
       const item = this.queue.first;
 
       this.queue.dequeue();
 
-      if (this.channel) this.channel.send(`:fast_forward: "${item.name}" skipped`);
+      if (this.channel) this.channel.send(`⏭ **${item.name}** skipped`);
     }
   }
 
@@ -183,7 +183,7 @@ class MediaPlayer {
 
       this.paused = true;
 
-      if (this.channel) this.channel.send(`:pause_button: "${this.queue.first.name}" paused`);
+      if (this.channel) this.channel.send(`⏸ **${this.queue.first.name}** paused`);
     }
   }
 
@@ -214,7 +214,7 @@ class MediaPlayer {
 
     this.queue.dequeue(item);
 
-    if (this.channel) this.channel.send(`:heavy_minus_sign: ${item.type} track removed: "${item.name}"`);
+    if (this.channel) this.channel.send(`🗑 track removed: **${item.name}**`);
   }
 
   public clear(): void {
