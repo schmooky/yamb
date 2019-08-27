@@ -18,6 +18,8 @@ const add = async (cmd: ParsedMessage, msg: Message, bot: Bot): Promise<void> =>
       name: track.title,
       duration: (track.durationMs / 1000).toFixed(0),
       requestor: msg.author.username,
+      albums: track.albums,
+      artists: track.artists,
     };
 
     bot.player.addMedia(media);
