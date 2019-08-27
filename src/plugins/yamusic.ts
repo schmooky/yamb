@@ -1,13 +1,12 @@
 /* eslint-disable class-methods-use-this */
 
-import { Message } from 'discord.js';
+import { Message, User } from 'discord.js';
 
 import { Bot, BotPlugin } from '../core/BotInterface';
 import { ParsedMessage } from '../core/BotCommandParser';
 import { MediaItem } from '../core/BotMedia';
 
 import trackService from '../services/track.service';
-import secondsToTimestamp from '../utils/secondsToTimestamp';
 import { isYandexURL } from '../utils/isURL';
 
 const yamusicType = 'yamusic';
@@ -24,9 +23,11 @@ export default class YamusicPlugin implements BotPlugin {
             bot.player.addMedia({
               type: yamusicType,
               url: track.trackURL,
-              duration: secondsToTimestamp((Math.floor(track.durationMs / 1000))),
-              requestor: msg.author.username,
+              duration: 0,
+              requestor: msg.author,
               name: track.title,
+              albums: track.albums,
+              artists: track.artists,
             });
           }
         });
@@ -41,6 +42,10 @@ export default class YamusicPlugin implements BotPlugin {
           type: 'yamusic',
           name: track.title,
           url: track.trackURL,
+          duration: 0,
+          requestor: new User(bot.client, {}),
+          albums: track.albums,
+          artists: track.artists,
         };
 
         return media;

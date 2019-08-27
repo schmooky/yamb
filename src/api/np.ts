@@ -1,18 +1,18 @@
-import { Message } from 'discord.js';
+import { Message, RichEmbed } from 'discord.js';
 
 import { Bot } from '../core/BotInterface';
 import { ParsedMessage } from '../core/BotCommandParser';
+import { embedNowPlaying } from '../core/BotEmbed';
 
 const np = async (cmd: ParsedMessage, msg: Message, bot: Bot): Promise<void> => {
   const nowPlaying = bot.player.queue.first;
 
   if (!bot.player.connection || !nowPlaying) {
-    msg.channel.send('Nothing is playing now');
-
+    msg.channel.send('❌ Nothing is currently playing');
     return;
   }
 
-  msg.channel.send(`Now playing: ${nowPlaying.name}`);
+  msg.channel.send(embedNowPlaying(nowPlaying));
 };
 
 export default np;

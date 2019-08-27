@@ -11,7 +11,7 @@ const play = async (cmd: ParsedMessage, msg: Message, bot: Bot): Promise<void> =
 
       bot.player.connection = connection;
 
-      msg.channel.send(`:speaking_head: Joined channel: ${connection.channel.name}`);
+      msg.channel.send(`📢 Joined channel: ${connection.channel.name}`);
     }
 
     bot.player.play();
