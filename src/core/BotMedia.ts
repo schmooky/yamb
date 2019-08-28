@@ -1,9 +1,10 @@
-import { User } from 'discord.js';
-
 export interface MediaItem {
   type: string;
   url: string;
-  requestor: User;
+  requestor: {
+    username: string;
+    avatarURL: string;
+  };
   name: string;
   duration: number;
   albums: import('../services/track.service').AlbumInfo[];

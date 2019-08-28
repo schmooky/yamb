@@ -15,7 +15,14 @@
     "plugin:jest/style"
   ],
   "rules": {
-    "max-len": ["warn", 120],
+    "max-len": [
+      "warn",
+      {
+        "ignoreUrls": true,
+        "code": 120,
+        "ignoreRegExpLiterals": true
+      }
+    ],
     "@typescript-eslint/indent": ["error", 2],
     "jest/no-empty-title": ["error"],
     "no-param-reassign": ["error", { "props": true, "ignorePropertyModificationsFor": ["bot"] }]

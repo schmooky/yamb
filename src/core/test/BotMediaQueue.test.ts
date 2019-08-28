@@ -2,21 +2,42 @@ import BotMediaQueue from '../BotMediaQueue';
 import { MediaItem } from '../BotMedia';
 
 describe('BotMediaQueue', (): void => {
-  const items = [
+  const items: MediaItem[] = [
     {
       type: 'music',
       url: 'someurl.com/1',
       name: 'Joe',
+      requestor: {
+        username: '',
+        avatarURL: '',
+      },
+      duration: 230,
+      albums: [],
+      artists: [],
     },
     {
       type: 'music',
       url: 'someurl.com/2',
       name: 'Joe',
+      requestor: {
+        username: '',
+        avatarURL: '',
+      },
+      duration: 230,
+      albums: [],
+      artists: [],
     },
     {
       type: 'music',
       url: 'someurl.com/3',
       name: 'Joe',
+      requestor: {
+        username: '',
+        avatarURL: '',
+      },
+      duration: 230,
+      albums: [],
+      artists: [],
     },
   ];
 
@@ -47,6 +68,13 @@ describe('BotMediaQueue', (): void => {
       type: 'music',
       url: 'someurl.com/1',
       name: 'Joe',
+      duration: 230,
+      requestor: {
+        username: '',
+        avatarURL: '',
+      },
+      albums: [],
+      artists: [],
     };
 
     MediaQueue.enqueue(media);
@@ -78,6 +106,14 @@ describe('BotMediaQueue', (): void => {
     const unknownMedia: MediaItem = {
       type: 'music',
       url: 'someunknownmusic.com/1',
+      name: 'unknows',
+      duration: 230,
+      requestor: {
+        username: '',
+        avatarURL: '',
+      },
+      albums: [],
+      artists: [],
     };
 
     MediaQueue.enqueue(items[0]);
