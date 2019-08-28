@@ -21,6 +21,8 @@ class MediaPlayer {
 
   public config: BotConfig;
 
+  public nowPlaying?: MediaItem;
+
   public playing: boolean = false;
 
   public paused: boolean = false;
@@ -72,10 +74,11 @@ class MediaPlayer {
     });
 
     this.dispatcher.on('start', (): void => {
+      this.nowPlaying = item;
       this.playing = true;
 
       if (this.channel) {
-        this.channel.send(embedNowPlaying(item));
+        this.channel.send(embedNowPlaying(this.nowPlaying));
       }
     });
 
@@ -99,9 +102,11 @@ class MediaPlayer {
         this.dispatcher = undefined;
 
         if (!this.stopping) {
-          const track = this.queue.dequeue();
+          if (this.config.queue.repeat && this.nowPlaying) {
+            this.queue.enqueue(this.nowPlaying);
+          }
 
-          if (this.config.queue.repeat) this.queue.enqueue(track);
+          this.nowPlaying = undefined;
 
           this.play();
         }
@@ -112,7 +117,11 @@ class MediaPlayer {
   }
 
   public play(): void {
-    if (this.queue.length === 0 && this.channel) {
+    if (!this.nowPlaying) {
+      this.nowPlaying = this.queue.dequeue();
+    }
+
+    if (this.queue.length === 0 && this.channel && !this.nowPlaying) {
       this.channel.send('❌ Queue is empty! Add some songs!');
     }
 
@@ -120,7 +129,7 @@ class MediaPlayer {
       this.channel.send('❌ Already playing a song!');
     }
 
-    const item = this.queue.first;
+    const item = this.nowPlaying;
 
     if (item && this.connection) {
       const type = this.typeRegistry.get(item.type);
@@ -135,7 +144,7 @@ class MediaPlayer {
 
           this.paused = false;
 
-          if (this.channel) this.channel.send(`⏯ **${this.queue.first.name}** resumed`);
+          if (this.channel && this.nowPlaying) this.channel.send(`⏯ **${this.nowPlaying.name}** resumed`);
         }
       }
     }
@@ -146,8 +155,8 @@ class MediaPlayer {
   }
 
   public stop(): void {
-    if (this.playing && this.dispatcher) {
-      const item = this.queue.first;
+    if (this.playing && this.dispatcher && this.nowPlaying) {
+      const item = this.nowPlaying;
 
       this.stopping = true;
 
@@ -160,8 +169,8 @@ class MediaPlayer {
   }
 
   public skip(): void {
-    if (this.playing && this.dispatcher) {
-      const item = this.queue.first;
+    if (this.playing && this.dispatcher && this.nowPlaying) {
+      const item = this.nowPlaying;
 
       this.paused = false;
 
@@ -169,21 +178,19 @@ class MediaPlayer {
 
       if (this.channel) this.channel.send(`⏭ **${item.name}** skipped`);
     } else if (this.queue.length > 0) {
-      const item = this.queue.first;
-
-      this.queue.dequeue();
+      const item = this.queue.dequeue();
 
       if (this.channel) this.channel.send(`⏭ **${item.name}** skipped`);
     }
   }
 
   public pause(): void {
-    if (this.playing && !this.paused && this.dispatcher) {
+    if (this.playing && !this.paused && this.dispatcher && this.nowPlaying) {
       this.dispatcher.pause();
 
       this.paused = true;
 
-      if (this.channel) this.channel.send(`⏸ **${this.queue.first.name}** paused`);
+      if (this.channel) this.channel.send(`⏸ **${this.nowPlaying.name}** paused`);
     }
   }
 
@@ -210,8 +217,6 @@ class MediaPlayer {
   }
 
   public remove(item: MediaItem): void {
-    if (item === this.queue.first && (this.playing || this.paused)) this.stop();
-
     this.queue.dequeue(item);
 
     if (this.channel) this.channel.send(`🗑 track removed: **${item.name}**`);

@@ -5,14 +5,14 @@ import { ParsedMessage } from '../core/BotCommandParser';
 import secondsToTimestamp from '../utils/secondsToTimestamp';
 
 const time = async (cmd: ParsedMessage, msg: Message, bot: Bot): Promise<void> => {
-  const media = bot.player.queue.first;
+  const media = bot.player.nowPlaying;
 
-  if (bot.player.playing && bot.player.dispatcher) {
+  if (bot.player.playing && media && bot.player.dispatcher) {
     const elapsed = secondsToTimestamp(bot.player.dispatcher.totalStreamTime / 1000);
 
-    msg.channel.send(`${elapsed} / ${media.duration}`);
-  } else if (bot.player.queue.first) {
-    msg.channel.send(`00:00:00 / ${media.duration}`);
+    msg.channel.send(`${elapsed} / ${secondsToTimestamp(media.duration)}`);
+  } else if (media) {
+    msg.channel.send(`00:00:00 / ${secondsToTimestamp(media.duration)}`);
   }
 };
 
