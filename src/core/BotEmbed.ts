@@ -90,9 +90,20 @@ const embedHelp = (): RichEmbed => {
   return embed;
 };
 
+const embedMultipleTracksAdded = (tracks: MediaItem[]): RichEmbed => {
+  const embed = new RichEmbed()
+    .setColor('#ffdb4d')
+    .setDescription(`Added ${tracks.length} tracks`)
+    .addField('First Track', `${tracks[0].name}`, true)
+    .setFooter(copyright, logoYandexMusicURL);
+
+  return embed;
+};
+
 export {
   embedTrackAdded,
   embedNowPlaying,
   embedList,
   embedHelp,
+  embedMultipleTracksAdded,
 };

@@ -8,7 +8,7 @@ import { BotConfig } from './BotConfig';
 import { MediaItem, MediaType } from './BotMedia';
 import MediaQueue from './BotMediaQueue';
 
-import { embedTrackAdded, embedNowPlaying } from './BotEmbed';
+import { embedTrackAdded, embedNowPlaying, embedMultipleTracksAdded } from './BotEmbed';
 
 import logger from '../utils/logger';
 
@@ -40,16 +40,18 @@ class MediaPlayer {
     this.status = status;
   }
 
-  public addMedia(item: MediaItem): void {
-    const type = this.typeRegistry.get(item.type);
+  public addMedia(items: MediaItem[]): void {
+    items.forEach((item): void => {
+      const type = this.typeRegistry.get(item.type);
 
-    if (type) {
-      this.queue.enqueue(item);
-
-      if (this.channel && item) {
-        this.channel.send(embedTrackAdded(item));
-      }
-    } else if (this.channel) this.channel.send('❌ Error adding track: Unknown Media Type!');
+      if (type) {
+        this.queue.enqueue(item);
+      } else if (this.channel) this.channel.send('❌ Error adding track: Unknown Media Type!');
+    });
+    if (this.channel && items) {
+      if (items.length > 1) this.channel.send(embedMultipleTracksAdded(items));
+      else this.channel.send(embedTrackAdded(items[0]));
+    }
   }
 
   public at(idx: number): MediaItem {
