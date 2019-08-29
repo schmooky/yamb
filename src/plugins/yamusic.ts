@@ -19,8 +19,8 @@ export default class YamusicPlugin implements BotPlugin {
       if (cmd.arguments.length > 0) {
         cmd.arguments.forEach(async (arg: string): Promise<void> => {
           if (isYandexURL(arg)) {
-            const [track] = await trackService.fetchTracksByURL(arg);
-            bot.player.addMedia({
+            const [track] = await trackService.findContentByURL(arg);
+            bot.player.addMedia([{
               type: yamusicType,
               url: track.trackURL,
               duration: 0,
@@ -28,7 +28,7 @@ export default class YamusicPlugin implements BotPlugin {
               name: track.title,
               albums: track.albums,
               artists: track.artists,
-            });
+            }]);
           }
         });
       }
@@ -36,7 +36,7 @@ export default class YamusicPlugin implements BotPlugin {
 
     bot.player.typeRegistry.set(yamusicType, {
       getDetails: async (item: MediaItem): Promise<MediaItem> => {
-        const [track] = await trackService.fetchTracksByURL(item.url);
+        const [track] = await trackService.findContentByURL(item.url);
 
         const media = {
           type: 'yamusic',
