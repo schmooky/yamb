@@ -3,14 +3,9 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-winston.addColors(winston.config.npm.colors);
-
 const logger = winston.createLogger({
   level: 'info',
   transports: [
-    //
-    // - Write to all logs with level `info` and below to `PiClock.log`
-    //
     new winston.transports.File({
       filename: './log/pretty.log',
       format: winston.format.combine(
@@ -22,7 +17,6 @@ const logger = winston.createLogger({
     }),
   ],
 });
-
 
 if (process.env.NODE_ENV !== 'production') {
   logger.add(new winston.transports.Console({
