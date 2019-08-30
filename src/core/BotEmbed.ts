@@ -14,7 +14,7 @@ const embedTrackAdded = (track: MediaItem): RichEmbed => {
     .setDescription('Track added')
     .setThumbnail(`http://${track.albums[0].coverUri.slice(0, -2)}200x200`)
     .addField('Track', `${track.name}`, true)
-    .addField('Artist', `${track.artists[0].name}`, true)
+    .addField('Artist', track.artists[0] ? `${track.artists[0].name}` : 'none', true)
     .addField('Album', `${track.albums[0].title}`, true)
     .setFooter(copyright, logoYandexMusicURL);
 
@@ -28,7 +28,7 @@ const embedNowPlaying = (track: MediaItem): RichEmbed => {
     .setDescription('Now playing')
     .setThumbnail(`http://${track.albums[0].coverUri.slice(0, -2)}200x200`)
     .addField('Track', `${track.name}`, true)
-    .addField('Artist', `${track.artists[0].name}`, true)
+    .addField('Artist', track.artists[0] ? `${track.artists[0].name}` : 'none', true)
     .addField('Album', `${track.albums[0].title}`, true)
     .addField('Time', `${secondsToTimestamp(track.duration)}`, true)
     .setFooter(copyright, logoYandexMusicURL);

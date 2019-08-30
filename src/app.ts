@@ -9,13 +9,8 @@ bot
   .connect()
   .then((): void => {
     logger.debug('Bot Ready');
-
-    console.log('Bot Online');
-
     bot.listen();
   })
   .catch((err: Error): void => {
-    console.log(err);
-
     logger.error(err);
   });
