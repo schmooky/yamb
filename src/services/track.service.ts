@@ -115,7 +115,7 @@ const downloadInfo = async (storageDir: string): Promise<DownloadInfo> => {
   }
 };
 
-const getTrackURL = (info: DownloadInfo): string => {
+const createTrackURL = (info: DownloadInfo): string => {
   const trackUrl = `XGRlBW9FXlekgbPrRHuSiA${info.path.substr(1)}${info.s}`;
 
   const hashedUrl = crypto
@@ -134,7 +134,8 @@ const findTrack = async (trackID: string): Promise<Track[]> => {
 
     const response = await axios.get(jsonURL);
     const info = await downloadInfo(response.data.track.storageDir);
-    const trackURL = getTrackURL(info);
+
+    const trackURL = createTrackURL(info);
 
     const track = {
       ...response.data.track,
@@ -158,7 +159,7 @@ const findAlbum = async (albumID: string): Promise<Track[]> => {
 
     const tracks: Track[] = albumTracks.map(async (track: Track): Promise<Track> => {
       const trackInfo = await downloadInfo(track.storageDir);
-      const trackURL = getTrackURL(trackInfo);
+      const trackURL = createTrackURL(trackInfo);
 
       return {
         ...track,
@@ -185,7 +186,7 @@ const findPlaylist = async (username: string, playlistID: string): Promise<Track
 
     const tracks: Track[] = playlistTracks.map(async (track: PlaylistTrack): Promise<Track> => {
       const trackInfo = await downloadInfo(track.track.storageDir);
-      const trackURL = getTrackURL(trackInfo);
+      const trackURL = createTrackURL(trackInfo);
 
       return {
         ...track.track,
@@ -210,19 +211,27 @@ const findContentByURL = async (url: string): Promise<Track[]> => {
         const startSlice = url.search(/album\/[0-9]*\/track\/[0-9]*$/);
         const info = url.slice(startSlice, url.length).split('/');
 
-        return findTrack(info[3]);
+        const tracks = await findTrack(info[3]);
+
+        return tracks;
       }
+
       if (isAlbumURL(url)) {
         const startSlice = url.search(/album\/[0-9]*$/);
         const info = url.slice(startSlice, url.length).split('/');
 
-        return findAlbum(info[1]);
+        const tracks = await findAlbum(info[1]);
+
+        return tracks;
       }
+
       if (isPlaylistURL(url)) {
         const startSlice = url.search(/users\/(.*)\//);
         const info = url.slice(startSlice, url.length).split('/');
 
-        return findPlaylist(info[1], info[3]);
+        const tracks = await findPlaylist(info[1], info[3]);
+
+        return tracks;
       }
 
       return Promise.reject(Error(`${url} is wrong Yandex URL`));
@@ -236,7 +245,6 @@ const findContentByURL = async (url: string): Promise<Track[]> => {
   }
 };
 
-//! Add usage to add.ts
 const findTrackByName = async (trackName: string): Promise<Track[]> => {
   try {
     const JsonURL = `https://api.music.yandex.net/search?type=track&text=${trackName}&page=0`;
@@ -247,18 +255,15 @@ const findTrackByName = async (trackName: string): Promise<Track[]> => {
       return Promise.reject(Error(`${trackName} not found`));
     }
 
-    const foundTracks = response.data.result.tracks.results;
-    const tracks: Track[] = foundTracks.map(async (track: Track): Promise<Track> => {
-      const trackInfo = await downloadInfo(track.storageDir);
-      const trackURL = getTrackURL(trackInfo);
+    const [track] = response.data.result.tracks.results;
 
-      return {
-        ...track,
-        trackURL,
-      };
-    });
+    const trackInfo = await downloadInfo(track.storageDir);
+    const trackURL = createTrackURL(trackInfo);
 
-    return tracks;
+    return {
+      ...track,
+      trackURL,
+    };
   } catch (error) {
     logger.error(error);
 
@@ -266,7 +271,6 @@ const findTrackByName = async (trackName: string): Promise<Track[]> => {
   }
 };
 
-//! Add usage to add.ts
 const findAlbumByName = async (albumName: string): Promise<Track[]> => {
   try {
     const JsonURL = `https://api.music.yandex.net/search?type=track&text=${albumName}&page=0`;
@@ -277,10 +281,9 @@ const findAlbumByName = async (albumName: string): Promise<Track[]> => {
       return Promise.reject(Error(`${albumName} not found`));
     }
 
-    const foundTracks = response.data.result.tracks.results;
-    const tracks: Track[] = foundTracks.map(async (track: Track): Promise<Track> => {
+    const tracks: Track[] = response.data.result.tracks.results.map(async (track: Track): Promise<Track> => {
       const trackInfo = await downloadInfo(track.storageDir);
-      const trackURL = getTrackURL(trackInfo);
+      const trackURL = createTrackURL(trackInfo);
 
       return {
         ...track,
@@ -288,7 +291,9 @@ const findAlbumByName = async (albumName: string): Promise<Track[]> => {
       };
     });
 
-    return tracks;
+    const foundTracks = await Promise.all(tracks);
+
+    return foundTracks;
   } catch (error) {
     logger.error(error);
 
