@@ -15,6 +15,10 @@ const logger = winston.createLogger({
       ),
       handleExceptions: true,
     }),
+    new winston.transports.File({ filename: './log/warn.log', level: 'warn' }),
+    new winston.transports.File({ filename: './log/error.log', level: 'error' }),
+    new winston.transports.File({ filename: './log/fatal.log', level: 'fatal' }),
+    new winston.transports.File({ filename: './log/combined.log' }),
   ],
 });
 
