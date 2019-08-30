@@ -48,6 +48,7 @@ class MediaPlayer {
         this.queue.enqueue(item);
       } else if (this.channel) this.channel.send('❌ Error adding track: Unknown Media Type!');
     });
+
     if (this.channel && items) {
       if (items.length > 1) this.channel.send(embedMultipleTracksAdded(items));
       else this.channel.send(embedTrackAdded(items[0]));
