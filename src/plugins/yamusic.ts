@@ -7,7 +7,7 @@ import { ParsedMessage } from '../core/BotCommandParser';
 import { MediaItem } from '../core/BotMedia';
 
 import trackService from '../services/track.service';
-import { isYandexURL } from '../utils/isURL';
+import { isYandexURL } from '../utils/inspectURL';
 
 const yamusicType = 'yamusic';
 

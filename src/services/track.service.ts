@@ -7,7 +7,7 @@ import {
   isTrackURL,
   isAlbumURL,
   isPlaylistURL,
-} from '../utils/isURL';
+} from '../utils/inspectURL';
 
 import logger from '../utils/logger';
 
