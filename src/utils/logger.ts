@@ -1,30 +1,38 @@
-import pino from 'pino';
-import childProcess from 'child_process';
-import stream from 'stream';
+import winston from 'winston';
+import dotenv from 'dotenv';
 
-const cwd = process.cwd();
-const { env } = process;
-const logPath = `${cwd}/log`;
+dotenv.config();
 
-const logThrough = new stream.PassThrough();
-const logger = pino({ name: 'project' }, logThrough);
+winston.addColors(winston.config.npm.colors);
 
-const child = childProcess.spawn(
-  process.execPath,
-  [
-    require.resolve('pino-tee'),
-    'warn',
-    `${logPath}/warn.log`,
-    'error',
-    `${logPath}/error.log`,
-    'fatal',
-    `${logPath}/fatal.log`,
-    'info',
-    `${logPath}/info.log`,
+const logger = winston.createLogger({
+  level: 'info',
+  transports: [
+    //
+    // - Write to all logs with level `info` and below to `PiClock.log`
+    //
+    new winston.transports.File({
+      filename: './log/pretty.log',
+      format: winston.format.combine(
+        winston.format.timestamp(),
+        winston.format.metadata(),
+        winston.format.json(),
+      ),
+      handleExceptions: true,
+    }),
   ],
-  { cwd, env },
-);
+});
 
-logThrough.pipe(child.stdin);
+
+if (process.env.NODE_ENV !== 'production') {
+  logger.add(new winston.transports.Console({
+    level: 'debug',
+    format: winston.format.combine(
+      winston.format.colorize(),
+      winston.format.timestamp(),
+      winston.format.printf((info): string => `${info.timestamp} [${info.level}]: ${info.message}`),
+    ),
+  }));
+}
 
 export default logger;

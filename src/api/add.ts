@@ -1,5 +1,7 @@
 import { Message } from 'discord.js';
 
+import logger from '../utils/logger';
+
 import { Bot } from '../core/BotInterface';
 import { ParsedMessage } from '../core/BotCommandParser';
 import { MediaItem } from '../core/BotMedia';
