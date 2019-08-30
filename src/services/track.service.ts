@@ -7,7 +7,7 @@ import {
   isTrackURL,
   isAlbumURL,
   isPlaylistURL,
-} from '../utils/isURL';
+} from '../utils/inspectURL';
 
 import logger from '../utils/logger';
 
@@ -128,6 +128,11 @@ const createTrackURL = (info: DownloadInfo): string => {
   return link;
 };
 
+/**
+ * Принимает идентификатор трека и возвращает трек
+ * @param  {string} trackID ID трека
+ * @returns {Promise<Track[]>} Массив с треком
+ */
 const findTrack = async (trackID: string): Promise<Track[]> => {
   try {
     const jsonURL = `https://music.yandex.ru/handlers/track.jsx?track=${trackID}`;
@@ -150,6 +155,12 @@ const findTrack = async (trackID: string): Promise<Track[]> => {
   }
 };
 
+/**
+ * Принимает идентификатор альбома и возвращает треки из альбома
+ * @param  {string} albumID ID плейлиста
+ *
+ * @returns {Promise<Track[]>} Массив с треками альбома
+ */
 const findAlbum = async (albumID: string): Promise<Track[]> => {
   try {
     const jsonURL = `https://music.yandex.ru/handlers/album.jsx?album=${albumID}`;
@@ -177,6 +188,13 @@ const findAlbum = async (albumID: string): Promise<Track[]> => {
   }
 };
 
+/**
+ * Принимает идентификаторы плейлиста и возвращает треки из плейлиста
+ * @param  {string} username Имя владельца плейлиста
+ * @param  {string} playlistID ID плейлиста
+ *
+ * @returns {Promise<Track[]>} Массив с треками плейлиста
+ */
 const findPlaylist = async (username: string, playlistID: string): Promise<Track[]> => {
   try {
     const jsonURL = `https://api.music.yandex.net/users/${username}/playlists/${playlistID}`;
@@ -204,6 +222,12 @@ const findPlaylist = async (username: string, playlistID: string): Promise<Track
   }
 };
 
+/**
+ * Принимает ссылку на контент и возвращает массив с найденным контентом
+ * @param  {string} url Ссылка на контент
+ *
+ * @returns {Promise<Track[]>} Массив с треками
+ */
 const findContentByURL = async (url: string): Promise<Track[]> => {
   try {
     if (isYandexURL(url)) {
@@ -245,6 +269,12 @@ const findContentByURL = async (url: string): Promise<Track[]> => {
   }
 };
 
+/**
+ * Принимает название трека и возвращает результаты поиска
+ *
+ * @param  {string} trackName Название трека
+ * @returns {Promise<Track[]>} Результаты поиска трека по названию
+ */
 const findTrackByName = async (trackName: string): Promise<Track[]> => {
   try {
     const JsonURL = `https://api.music.yandex.net/search?type=track&text=${trackName}&page=0`;
@@ -271,38 +301,7 @@ const findTrackByName = async (trackName: string): Promise<Track[]> => {
   }
 };
 
-const findAlbumByName = async (albumName: string): Promise<Track[]> => {
-  try {
-    const JsonURL = `https://api.music.yandex.net/search?type=track&text=${albumName}&page=0`;
-
-    const response = await axios.get(JsonURL);
-
-    if (!response.data.result) {
-      return Promise.reject(Error(`${albumName} not found`));
-    }
-
-    const tracks: Track[] = response.data.result.tracks.results.map(async (track: Track): Promise<Track> => {
-      const trackInfo = await downloadInfo(track.storageDir);
-      const trackURL = createTrackURL(trackInfo);
-
-      return {
-        ...track,
-        trackURL,
-      };
-    });
-
-    const foundTracks = await Promise.all(tracks);
-
-    return foundTracks;
-  } catch (error) {
-    logger.error(error);
-
-    return error;
-  }
-};
-
 export default {
   findContentByURL,
   findTrackByName,
-  findAlbumByName,
 };
