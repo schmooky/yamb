@@ -41,12 +41,12 @@ const DefaultBotConfig: BotConfig = {
   },
 
   discord: {
-    token: process.env.BOT_TOKEN as string,
+    token: process.env.BOT_TOKEN,
     log: true,
   },
 
   command: {
-    symbol: process.env.PREFIX as string,
+    symbol: process.env.PREFIX,
   },
 
   queue: {

@@ -7,8 +7,8 @@ export interface MediaItem {
   };
   name: string;
   duration: number;
-  albums: import('../services/track.service').AlbumInfo[];
-  artists: import('../services/track.service').Artist[];
+  albums: AlbumInfo[];
+  artists: Artist[];
 }
 
 export interface MediaType {
