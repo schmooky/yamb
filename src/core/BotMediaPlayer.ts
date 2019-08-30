@@ -228,6 +228,7 @@ class MediaPlayer {
   public clear(): void {
     if (this.playing || this.paused) this.stop();
 
+    this.nowPlaying = undefined;
     this.queue.clear();
 
     if (this.channel) this.channel.send(':cd: Playlist Cleared');
