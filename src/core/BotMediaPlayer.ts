@@ -201,8 +201,8 @@ class MediaPlayer {
     const max = this.queue.length - 1;
     const min = 0;
 
-    const from = Math.min(Math.max(currentIdx, min), max);
-    const to = Math.min(Math.max(targetIdx, min), max);
+    const from = Math.min(Math.max(currentIdx - 1, min), max);
+    const to = Math.min(Math.max(targetIdx - 1, min), max);
 
     this.queue.move(from, to);
   }
