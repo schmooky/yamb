@@ -27,7 +27,7 @@ class SMTPTransport extends TransportStream {
       to: 'discord-yamusic@yandex.ru',
       subject: `${info.level}`,
       text: info.message,
-      html: `${info.timestamp} ${info.message}`,
+      html: info.message,
     };
 
     this.transporter.sendMail(mailOptions);
