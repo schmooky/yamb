@@ -41,13 +41,7 @@ class MediaPlayer {
   }
 
   public addMedia(items: MediaItem[]): void {
-    items.forEach((item): void => {
-      const type = this.typeRegistry.get(item.type);
-
-      if (type) {
-        this.queue.enqueue(item);
-      } else if (this.channel) this.channel.send('❌ Error adding track: Unknown Media Type!');
-    });
+    items.forEach((item): void => this.queue.enqueue(item));
 
     if (this.channel && items) {
       if (items.length > 1) this.channel.send(embedMultipleTracksAdded(items));
@@ -135,20 +129,14 @@ class MediaPlayer {
     const item = this.nowPlaying;
 
     if (item && this.connection) {
-      const type = this.typeRegistry.get(item.type);
+      if (!this.playing) {
+        this.dispatchStream(item.url, item);
+      } else if (this.paused && this.dispatcher) {
+        this.dispatcher.resume();
 
-      if (type) {
-        if (!this.playing) {
-          type.getStream(item).then((stream: string): void => {
-            this.dispatchStream(stream, item);
-          });
-        } else if (this.paused && this.dispatcher) {
-          this.dispatcher.resume();
+        this.paused = false;
 
-          this.paused = false;
-
-          if (this.channel && this.nowPlaying) this.channel.send(`⏯ **${this.nowPlaying.name}** resumed`);
-        }
+        if (this.channel && this.nowPlaying) this.channel.send(`⏯ **${this.nowPlaying.name}** resumed`);
       }
     }
   }
@@ -205,6 +193,10 @@ class MediaPlayer {
     const to = Math.min(Math.max(targetIdx - 1, min), max);
 
     this.queue.move(from, to);
+
+    if (this.channel) {
+      this.channel.send(`Track at ${from + 1} position **${this.at(to).name}** has been moved to ${to + 1}`);
+    }
   }
 
   public setVolume(volume: number): void {

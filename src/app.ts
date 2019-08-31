@@ -9,6 +9,7 @@ bot
   .connect()
   .then((): void => {
     logger.debug('Bot Ready');
+
     bot.listen();
   })
   .catch((err: Error): void => {

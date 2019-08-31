@@ -12,9 +12,6 @@ import { ParsedMessage, parse } from './BotCommandParser';
 
 import logger from '../utils/logger';
 
-// Plugins
-import YamusicPlugin from '../plugins/yamusic';
-
 // Commands
 import help from '../api/help';
 import play from '../api/play';
@@ -52,7 +49,7 @@ class YBot implements Bot {
 
   public helptext: string;
 
-  public plugins!: BotPlugin[];
+  public plugins: BotPlugin[];
 
   public constructor(config: BotConfig) {
     this.helptext = 'Help hint!';
@@ -140,7 +137,7 @@ class YBot implements Bot {
     this.status = new BotStatus(this.client);
     this.player = new BotMediaPlayer(this.config, this.status);
 
-    this.plugins = [new YamusicPlugin()];
+    this.plugins = [];
 
     this.plugins.forEach((plugin): void => {
       plugin.preInitialize(this);
