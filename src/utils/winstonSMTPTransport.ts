@@ -1,5 +1,8 @@
 import nodeMailer from 'nodemailer';
 import TransportStream from 'winston-transport';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 class SMTPTransport extends TransportStream {
   private transporter = nodeMailer.createTransport({
@@ -7,26 +10,27 @@ class SMTPTransport extends TransportStream {
     port: 465,
     secure: true,
     auth: {
-      user: 'discord-yamusic@yandex.ru',
-      pass: '{discord-yamusic}',
+      user: process.env.EMAIL,
+      pass: process.env.PASS,
     },
   });
-
-  private mailOptions = {
-    from: '"discord-yamusic" <discord-yamusic@yandex.ru>',
-    to: 'discord-yamusic@yandex.ru',
-    subject: 'Hello ✔',
-    text: 'Hello world?',
-    html: '<b>Hello world?</b>',
-  };
 
   // eslint-disable-next-line no-useless-constructor
   public constructor(options: TransportStream.TransportStreamOptions) {
     super(options);
   }
 
-  public log(info: string, callback: any): void {
-    this.transporter.sendMail(this.mailOptions);
+  // eslint-disable-next-line no-explicit-any
+  public log(info: any, callback: any): void {
+    const mailOptions = {
+      from: '"discord-yamusic" <discord-yamusic@yandex.ru>',
+      to: 'discord-yamusic@yandex.ru',
+      subject: `${info.level}`,
+      text: info.message,
+      html: `${info.timestamp} ${info.message}`,
+    };
+
+    this.transporter.sendMail(mailOptions);
 
     if (callback) {
       setImmediate(callback);

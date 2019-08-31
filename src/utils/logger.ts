@@ -1,6 +1,8 @@
 import winston from 'winston';
 import dotenv from 'dotenv';
 
+import SMTPTransport from './winstonSMTPTransport';
+
 dotenv.config();
 
 const logger = winston.createLogger({
@@ -21,6 +23,13 @@ const logger = winston.createLogger({
     new winston.transports.File({ filename: './log/combined.log' }),
   ],
 });
+
+logger.add(new SMTPTransport({
+  level: 'error',
+  format: winston.format.combine(
+    winston.format.timestamp(),
+  ),
+}));
 
 if (process.env.NODE_ENV !== 'production') {
   logger.add(new winston.transports.Console({
