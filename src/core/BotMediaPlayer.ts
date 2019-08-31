@@ -200,15 +200,15 @@ class MediaPlayer {
   }
 
   public setVolume(volume: number): void {
-    this.config.stream.volume = Math.min(Math.max(volume / 100 + 0.5, 0.5), 2);
+    this.config.stream.volume = volume;
 
     if (this.dispatcher) {
-      this.dispatcher.setVolume(volume);
+      this.dispatcher.setVolumeLogarithmic(volume);
     }
   }
 
   public getVolume(): string {
-    return `${+(this.config.stream.volume - 0.5) * 100}%`;
+    return `${this.config.stream.volume * 100}%`;
   }
 
   public remove(item: MediaItem): void {
