@@ -17,9 +17,9 @@
   "main": "src/app.ts",
   "scripts": {
     "prod": "npm run build && npm run start",
-    "start": "cross-env NODE_ENV=production node dist/app.js",
+    "start": "cross-env NODE_ENV=production node --require dotenv/config dist/app.js",
     "build": "npm run clean && tsc && npm run lint:fix",
-    "dev": "ts-node-dev --respawn --no-notify src/app.ts",
+    "dev": "ts-node-dev --respawn --no-notify --require dotenv/config src/app.ts",
     "clean": "rimraf dist",
     "lint": "eslint --ext .ts .",
     "lint:fix": "eslint --fix --ext .ts .",

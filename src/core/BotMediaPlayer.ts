@@ -1,5 +1,9 @@
 import {
-  VoiceConnection, StreamDispatcher, TextChannel, DMChannel, GroupDMChannel,
+  VoiceConnection,
+  StreamDispatcher,
+  TextChannel,
+  DMChannel,
+  GroupDMChannel,
 } from 'discord.js';
 
 import BotStatus from './BotStatus';
