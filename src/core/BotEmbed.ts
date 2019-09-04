@@ -100,6 +100,14 @@ const embedMultipleTracksAdded = (tracks: MediaItem[]): RichEmbed => {
   return embed;
 };
 
+const embedPing = (ping: number): RichEmbed => {
+  const embed = new RichEmbed()
+    .setColor('#ffdb4d')
+    .setDescription(`⌛ ${Math.ceil(ping)}`);
+
+  return embed;
+};
+
 export {
   embedTrackAdded,
   embedNowPlaying,

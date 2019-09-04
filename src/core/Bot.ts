@@ -59,11 +59,7 @@ class YBot implements Bot {
 
     this.commands = new BotCommandMap()
       .on('ping', (cmd: ParsedMessage, msg: Message): void => {
-        let phrases = ['Can\'t stop won\'t stop!', ':ping_pong: Pong Bitch!'];
-
-        if (msg.guild) phrases = phrases.concat(msg.guild.emojis.array().map((x): string => x.name));
-
-        msg.channel.send(`${this.client.ping}ms, :${random(phrases)}:`);
+        msg.channel.send(embedPing(this.client.ping));
       })
       .on('help', help)
       .on('join', join)
