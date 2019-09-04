@@ -1,6 +1,5 @@
 import crypto from 'crypto';
 import axios from 'axios';
-import dotenv from 'dotenv';
 
 import {
   isYandexURL,
@@ -10,8 +9,6 @@ import {
 } from '../utils/inspectURL';
 
 import logger from '../utils/logger';
-
-dotenv.config();
 
 const downloadInfo = async (storageDir: string): Promise<DownloadInfo> => {
   try {

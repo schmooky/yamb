@@ -1,6 +1,7 @@
 {
   "name": "discord-yamusic",
   "version": "0.0.0",
+  "private": true,
   "description": "Discord Bot for Yandex.Music",
   "keywords": [],
   "repository": {
@@ -16,9 +17,9 @@
   "main": "src/app.ts",
   "scripts": {
     "prod": "npm run build && npm run start",
-    "start": "cross-env NODE_ENV=production node dist/app.js",
+    "start": "cross-env NODE_ENV=production node --require dotenv/config dist/app.js",
     "build": "npm run clean && tsc && npm run lint:fix",
-    "dev": "ts-node-dev --respawn --no-notify src/app.ts",
+    "dev": "ts-node-dev --respawn --no-notify --require dotenv/config src/app.ts",
     "clean": "rimraf dist",
     "lint": "eslint --ext .ts .",
     "lint:fix": "eslint --fix --ext .ts .",
@@ -35,8 +36,7 @@
     "winston": "^3.2.1",
     "winston-daily-rotate-file": "^3.10.0",
     "winston-timestamp-colorize": "^1.0.4",
-    "winston-transport": "^4.3.0",
-    "yandex-music-api": "0.0.3"
+    "winston-transport": "^4.3.0"
   },
   "devDependencies": {
     "@commitlint/cli": "^8.0.0",
@@ -73,5 +73,13 @@
       "npm run lint:fix",
       "git add ."
     ]
-  }
+  },
+  "engines": {
+    "node": ">= 12.9.1",
+    "npm": ">= 6.9.0"
+  },
+  "os": [
+    "darwin",
+    "linux"
+  ]
 }

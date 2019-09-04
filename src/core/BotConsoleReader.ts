@@ -1,8 +1,9 @@
 import readline from 'readline';
 import minimist from 'minimist';
-import BotCommandMap from './BotCommandMap';
-import logger from '../utils/logger';
 
+import BotCommandMap from './BotCommandMap';
+
+import logger from '../utils/logger';
 
 class BotConsoleReader {
   public commands: BotCommandMap;
