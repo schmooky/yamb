@@ -1,4 +1,4 @@
-import { RichEmbed, Client } from 'discord.js';
+import { RichEmbed } from 'discord.js';
 
 import { MediaItem } from './BotMedia';
 import BotMediaQueue from './BotMediaQueue';
@@ -100,20 +100,10 @@ const embedMultipleTracksAdded = (tracks: MediaItem[]): RichEmbed => {
   return embed;
 };
 
-const embedPing = (client: Client): RichEmbed => {
-  const embed = new RichEmbed()
-    .setColor('#ffdb4d')
-    .setDescription(`⌛ ${Math.ceil(client.ping)}`)
-    .setFooter(copyright, logoYandexMusicURL);
-
-  return embed;
-};
-
 export {
   embedTrackAdded,
   embedNowPlaying,
   embedList,
   embedHelp,
   embedMultipleTracksAdded,
-  embedPing,
 };

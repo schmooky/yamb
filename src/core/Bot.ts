@@ -9,7 +9,6 @@ import BotMediaPlayer from './BotMediaPlayer';
 import BotConsoleReader from './BotConsoleReader';
 import BotCommandMap from './BotCommandMap';
 import { ParsedMessage, parse } from './BotCommandParser';
-import { embedPing } from './BotEmbed';
 
 import logger from '../utils/logger';
 
@@ -60,7 +59,11 @@ class YBot implements Bot {
 
     this.commands = new BotCommandMap()
       .on('ping', (cmd: ParsedMessage, msg: Message): void => {
-        msg.channel.send(embedPing(this.client));
+        let phrases = ['Can\'t stop won\'t stop!', ':ping_pong: Pong Bitch!'];
+
+        if (msg.guild) phrases = phrases.concat(msg.guild.emojis.array().map((x): string => x.name));
+
+        msg.channel.send(`${this.client.ping}ms, :${random(phrases)}:`);
       })
       .on('help', help)
       .on('join', join)
