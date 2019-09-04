@@ -9,6 +9,7 @@ import BotMediaPlayer from './BotMediaPlayer';
 import BotConsoleReader from './BotConsoleReader';
 import BotCommandMap from './BotCommandMap';
 import { ParsedMessage, parse } from './BotCommandParser';
+import { embedPing } from './BotEmbed';
 
 import logger from '../utils/logger';
 
@@ -29,8 +30,6 @@ import remove from '../api/remove';
 import skip from '../api/skip';
 import time from '../api/time';
 import volume from '../api/volume';
-
-const random = (array: string[]): string => array[Math.floor(Math.random() * array.length)];
 
 class YBot implements Bot {
   public client: Client;

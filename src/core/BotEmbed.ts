@@ -114,4 +114,5 @@ export {
   embedList,
   embedHelp,
   embedMultipleTracksAdded,
+  embedPing,
 };
