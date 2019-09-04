@@ -132,6 +132,38 @@ const findPlaylist = async (username: string, playlistID: string): Promise<Track
 };
 
 /**
+ * Принимает название трека и возвращает результаты поиска
+ *
+ * @param  {string} trackName Название трека
+ * @returns {Promise<Track[]>} Результаты поиска трека по названию
+ */
+const findTrackByName = async (trackName: string): Promise<Track> => {
+  try {
+    const JsonURL = `https://api.music.yandex.net/search?type=track&text=${trackName.replace(/ /g, '%20')}&page=0`;
+
+    const response = await axios.get(JsonURL);
+
+    if (!response.data.result) {
+      return Promise.reject(Error(`${trackName} not found`));
+    }
+
+    const [track] = response.data.result.tracks.results;
+
+    const trackInfo = await downloadInfo(track.storageDir);
+    const trackURL = createTrackURL(trackInfo);
+
+    return {
+      ...track,
+      trackURL,
+    };
+  } catch (error) {
+    logger.error(error);
+
+    return error;
+  }
+};
+
+/**
  * Принимает ссылку на контент и возвращает массив с найденным контентом
  * @param  {string} url Ссылка на контент
  *
@@ -170,39 +202,8 @@ const findContentByURL = async (url: string): Promise<Track[]> => {
       return Promise.reject(Error(`${url} is wrong Yandex URL`));
     }
 
-    return Promise.reject(Error(`${url} is wrong URL`));
-  } catch (error) {
-    logger.error(error);
-
-    return error;
-  }
-};
-
-/**
- * Принимает название трека и возвращает результаты поиска
- *
- * @param  {string} trackName Название трека
- * @returns {Promise<Track[]>} Результаты поиска трека по названию
- */
-const findTrackByName = async (trackName: string): Promise<Track[]> => {
-  try {
-    const JsonURL = `https://api.music.yandex.net/search?type=track&text=${trackName}&page=0`;
-
-    const response = await axios.get(JsonURL);
-
-    if (!response.data.result) {
-      return Promise.reject(Error(`${trackName} not found`));
-    }
-
-    const [track] = response.data.result.tracks.results;
-
-    const trackInfo = await downloadInfo(track.storageDir);
-    const trackURL = createTrackURL(trackInfo);
-
-    return {
-      ...track,
-      trackURL,
-    };
+    const track = await findTrackByName(url);
+    return [track];
   } catch (error) {
     logger.error(error);
 
