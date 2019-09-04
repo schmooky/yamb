@@ -5,6 +5,14 @@ import SMTPTransport from './winstonSMTPTransport';
 
 dotenv.config();
 
+const errorTraceFormat = winston.format((info: any): any => { //! Найти типы info или задать
+  const modifiedInfo = info;
+  if (info.meta && info.meta instanceof Error) {
+    modifiedInfo.message = `${info.message} ${info.meta.stack}`;
+  }
+  return modifiedInfo;
+});
+
 const logger = winston.createLogger({
   level: 'info',
   transports: [
@@ -28,6 +36,8 @@ logger.add(new SMTPTransport({
   level: 'error',
   format: winston.format.combine(
     winston.format.timestamp(),
+    winston.format.metadata(),
+    winston.format.json(),
   ),
 }));
 

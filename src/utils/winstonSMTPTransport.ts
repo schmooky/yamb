@@ -15,20 +15,20 @@ class SMTPTransport extends TransportStream {
     },
   });
 
-  // eslint-disable-next-line no-useless-constructor
-  public constructor(options: TransportStream.TransportStreamOptions) {
-    super(options);
-  }
-
-  // eslint-disable-next-line no-explicit-any
-  public log(info: any, callback: any): void {
+  public log(info: any, callback: any): void { //! Уточнить типы или задать
     const mailOptions = {
-      from: '"discord-yamusic" <discord-yamusic@yandex.ru>',
-      to: 'discord-yamusic@yandex.ru',
-      subject: `${info.level}`,
-      text: info.message,
-      html: info.message,
+      from: process.env.EMAIL,
+      to: process.env.EMAIL,
+      subject: `${info.level} ${info.metadata.timestamp}`,
+      text: `${info.message} \n ${info.metadata.stack}`,
+      html: `${info.message} \n ${info.metadata.stack}`,
     };
+
+    const stack = info.metadata.stack.split(/\r?\n[ \t]+/);
+
+    const messages: string[] = stack.map((message: string): string => `<b> ${message} </b>`);
+
+    mailOptions.html = messages.join('<br>');
 
     this.transporter.sendMail(mailOptions);
 
