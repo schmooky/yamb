@@ -60,7 +60,7 @@ class YBot implements Bot {
 
     this.commands = new BotCommandMap()
       .on('ping', (cmd: ParsedMessage, msg: Message): void => {
-        msg.channel.send(embedPing(this.client));
+        msg.channel.send(embedPing(this.client.ping));
       })
       .on('help', help)
       .on('join', join)

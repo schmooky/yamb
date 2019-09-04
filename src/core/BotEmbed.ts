@@ -100,11 +100,10 @@ const embedMultipleTracksAdded = (tracks: MediaItem[]): RichEmbed => {
   return embed;
 };
 
-const embedPing = (client: Client): RichEmbed => {
+const embedPing = (ping: number): RichEmbed => {
   const embed = new RichEmbed()
     .setColor('#ffdb4d')
-    .setDescription(`⌛ ${Math.ceil(client.ping)}`)
-    .setFooter(copyright, logoYandexMusicURL);
+    .setDescription(`⌛ ${Math.ceil(ping)}`);
 
   return embed;
 };
