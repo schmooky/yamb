@@ -5,29 +5,36 @@ import SMTPTransport from './winstonSMTPTransport';
 
 dotenv.config();
 
-const errorTraceFormat = winston.format((info: any): any => { //! Найти типы info или задать
-  const modifiedInfo = info;
-  if (info.meta && info.meta instanceof Error) {
-    modifiedInfo.message = `${info.message} ${info.meta.stack}`;
-  }
-  return modifiedInfo;
-});
-
 const logger = winston.createLogger({
   level: 'info',
   transports: [
     new winston.transports.File({
-      filename: './log/pretty.log',
+      filename: './log/warn.log',
+      level: 'warn',
       format: winston.format.combine(
         winston.format.timestamp(),
         winston.format.metadata(),
         winston.format.json(),
       ),
-      handleExceptions: true,
     }),
-    new winston.transports.File({ filename: './log/warn.log', level: 'warn' }),
-    new winston.transports.File({ filename: './log/error.log', level: 'error' }),
-    new winston.transports.File({ filename: './log/fatal.log', level: 'fatal' }),
+    new winston.transports.File({
+      filename: './log/error.log',
+      level: 'error',
+      format: winston.format.combine(
+        winston.format.timestamp(),
+        winston.format.metadata(),
+        winston.format.json(),
+      ),
+    }),
+    new winston.transports.File({
+      filename: './log/fatal.log',
+      level: 'fatal',
+      format: winston.format.combine(
+        winston.format.timestamp(),
+        winston.format.metadata(),
+        winston.format.json(),
+      ),
+    }),
     new winston.transports.File({ filename: './log/combined.log' }),
   ],
 });
