@@ -9,7 +9,6 @@ import BotMediaPlayer from './BotMediaPlayer';
 import BotConsoleReader from './BotConsoleReader';
 import BotCommandMap from './BotCommandMap';
 import { ParsedMessage, parse } from './BotCommandParser';
-import { embedPing } from './BotEmbed';
 
 import logger from '../utils/logger';
 

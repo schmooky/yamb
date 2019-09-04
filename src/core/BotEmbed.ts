@@ -1,4 +1,4 @@
-import { RichEmbed, Client } from 'discord.js';
+import { RichEmbed } from 'discord.js';
 
 import { MediaItem } from './BotMedia';
 import BotMediaQueue from './BotMediaQueue';
@@ -114,5 +114,4 @@ export {
   embedList,
   embedHelp,
   embedMultipleTracksAdded,
-  embedPing,
 };
