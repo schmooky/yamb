@@ -8,10 +8,7 @@ module.exports = {
   transform: {
     '^.+\\.ts$': 'ts-jest',
   },
-  transformIgnorePatterns: [
-    '/node_modules/',
-    '/dist/',
-  ],
-  testMatch: ['**/*.{spec,test}.{js,ts}'],
+  transformIgnorePatterns: ['[/\\\\]node_modules[/\\\\].+\\.(js|jsx|ts|tsx)$'],
+  testMatch: ['<rootDir>/src/**/*.{spec,test}.{js,ts}'],
   testEnvironment: 'node',
 };

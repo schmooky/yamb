@@ -7,99 +7,11 @@ import {
   isTrackURL,
   isAlbumURL,
   isPlaylistURL,
-} from '../utils/isURL';
+} from '../utils/inspectURL';
 
 import logger from '../utils/logger';
 
 dotenv.config();
-
-export interface SearchOptions {
-  type: string;
-}
-
-export interface AlbumInfo {
-  id: number;
-  storageDir: string;
-  originalReleaseYear: number;
-  year: number;
-  version: string;
-  type: string;
-  artists: [];
-  coverUri: string;
-  trackCount: number;
-  genre: string;
-  available: boolean;
-  availableForPremiumUsers: boolean;
-  title: string;
-}
-
-export interface Artist {
-  id: number;
-  cover: Cover;
-  composer: boolean;
-  name: string;
-  various: boolean;
-  decomposed: [];
-}
-
-export interface Cover {
-  type: string;
-  prefix: string;
-  uri: string;
-}
-
-export interface TrackInfo {
-  id: number;
-  available: boolean;
-  availableAsRbt: boolean;
-  availableForPremiumUsers: boolean;
-  lyricsAvailable: boolean;
-  albums: AlbumInfo[];
-  storageDir: string;
-  durationMs: number;
-  explicit: boolean;
-  title: string;
-  artists: Artist[];
-  regions: string[];
-}
-
-export interface SearchResult {
-  type: string;
-  page: number;
-  perPage: number;
-  text: string;
-  searchRequestId: string;
-  tracks: {
-    total: number;
-    perPage: number;
-    order: number;
-    results: TrackInfo[];
-  };
-}
-
-interface DownloadInfo {
-  s: string;
-  ts: string;
-  path: string;
-  host: string;
-}
-
-interface PlaylistTrack {
-  id: number;
-  track: TrackInfo;
-  timestamp: string;
-  recent: boolean;
-}
-
-export interface Track extends TrackInfo {
-  trackURL: string;
-}
-
-interface DownloadID {
-  trackID: string;
-  albumID: string;
-}
-
 
 const downloadInfo = async (storageDir: string): Promise<DownloadInfo> => {
   try {
@@ -115,7 +27,7 @@ const downloadInfo = async (storageDir: string): Promise<DownloadInfo> => {
   }
 };
 
-const getTrackURL = (info: DownloadInfo): string => {
+const createTrackURL = (info: DownloadInfo): string => {
   const trackUrl = `XGRlBW9FXlekgbPrRHuSiA${info.path.substr(1)}${info.s}`;
 
   const hashedUrl = crypto
@@ -139,7 +51,8 @@ const findTrack = async (trackID: string): Promise<Track[]> => {
 
     const response = await axios.get(jsonURL);
     const info = await downloadInfo(response.data.track.storageDir);
-    const trackURL = getTrackURL(info);
+
+    const trackURL = createTrackURL(info);
 
     const track = {
       ...response.data.track,
@@ -169,7 +82,7 @@ const findAlbum = async (albumID: string): Promise<Track[]> => {
 
     const tracks: Track[] = albumTracks.map(async (track: Track): Promise<Track> => {
       const trackInfo = await downloadInfo(track.storageDir);
-      const trackURL = getTrackURL(trackInfo);
+      const trackURL = createTrackURL(trackInfo);
 
       return {
         ...track,
@@ -203,7 +116,7 @@ const findPlaylist = async (username: string, playlistID: string): Promise<Track
 
     const tracks: Track[] = playlistTracks.map(async (track: PlaylistTrack): Promise<Track> => {
       const trackInfo = await downloadInfo(track.track.storageDir);
-      const trackURL = getTrackURL(trackInfo);
+      const trackURL = createTrackURL(trackInfo);
 
       return {
         ...track.track,
@@ -234,19 +147,27 @@ const findContentByURL = async (url: string): Promise<Track[]> => {
         const startSlice = url.search(/album\/[0-9]*\/track\/[0-9]*$/);
         const info = url.slice(startSlice, url.length).split('/');
 
-        return findTrack(info[3]);
+        const tracks = await findTrack(info[3]);
+
+        return tracks;
       }
+
       if (isAlbumURL(url)) {
         const startSlice = url.search(/album\/[0-9]*$/);
         const info = url.slice(startSlice, url.length).split('/');
 
-        return findAlbum(info[1]);
+        const tracks = await findAlbum(info[1]);
+
+        return tracks;
       }
+
       if (isPlaylistURL(url)) {
         const startSlice = url.search(/users\/(.*)\//);
         const info = url.slice(startSlice, url.length).split('/');
 
-        return findPlaylist(info[1], info[3]);
+        const tracks = await findPlaylist(info[1], info[3]);
+
+        return tracks;
       }
 
       return Promise.reject(Error(`${url} is wrong Yandex URL`));
@@ -260,8 +181,6 @@ const findContentByURL = async (url: string): Promise<Track[]> => {
   }
 };
 
-
-//! Add usage to add.ts
 /**
  * Принимает название трека и возвращает результаты поиска
  *
@@ -278,18 +197,15 @@ const findTrackByName = async (trackName: string): Promise<Track[]> => {
       return Promise.reject(Error(`${trackName} not found`));
     }
 
-    const foundTracks = response.data.result.tracks.results;
-    const tracks: Track[] = foundTracks.map(async (track: Track): Promise<Track> => {
-      const trackInfo = await downloadInfo(track.storageDir);
-      const trackURL = getTrackURL(trackInfo);
+    const [track] = response.data.result.tracks.results;
 
-      return {
-        ...track,
-        trackURL,
-      };
-    });
+    const trackInfo = await downloadInfo(track.storageDir);
+    const trackURL = createTrackURL(trackInfo);
 
-    return tracks;
+    return {
+      ...track,
+      trackURL,
+    };
   } catch (error) {
     logger.error(error);
 

@@ -48,6 +48,7 @@ class MediaPlayer {
         this.queue.enqueue(item);
       } else if (this.channel) this.channel.send('❌ Error adding track: Unknown Media Type!');
     });
+
     if (this.channel && items) {
       if (items.length > 1) this.channel.send(embedMultipleTracksAdded(items));
       else this.channel.send(embedTrackAdded(items[0]));
@@ -200,8 +201,8 @@ class MediaPlayer {
     const max = this.queue.length - 1;
     const min = 0;
 
-    const from = Math.min(Math.max(currentIdx, min), max);
-    const to = Math.min(Math.max(targetIdx, min), max);
+    const from = Math.min(Math.max(currentIdx - 1, min), max);
+    const to = Math.min(Math.max(targetIdx - 1, min), max);
 
     this.queue.move(from, to);
   }
@@ -227,6 +228,7 @@ class MediaPlayer {
   public clear(): void {
     if (this.playing || this.paused) this.stop();
 
+    this.nowPlaying = undefined;
     this.queue.clear();
 
     if (this.channel) this.channel.send(':cd: Playlist Cleared');
