@@ -1,6 +1,7 @@
 import nodeMailer from 'nodemailer';
 import TransportStream from 'winston-transport';
 import dotenv from 'dotenv';
+import winston from 'winston';
 
 dotenv.config();
 
@@ -15,7 +16,7 @@ class SMTPTransport extends TransportStream {
     },
   });
 
-  public log(info: any, callback: any): void { //! Уточнить типы или задать
+  public log(info: winston.LogEntry): void {
     const mailOptions = {
       from: process.env.EMAIL,
       to: process.env.EMAIL,
@@ -31,10 +32,6 @@ class SMTPTransport extends TransportStream {
     mailOptions.html = messages.join('<br>');
 
     this.transporter.sendMail(mailOptions);
-
-    if (callback) {
-      setImmediate(callback);
-    }
   }
 }
 
