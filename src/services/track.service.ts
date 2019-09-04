@@ -132,10 +132,10 @@ const findPlaylist = async (username: string, playlistID: string): Promise<Track
 };
 
 /**
- * Принимает название трека и возвращает результаты поиска
+ * Принимает название трека и возвращает результат поиска
  *
  * @param  {string} trackName Название трека
- * @returns {Promise<Track[]>} Результаты поиска трека по названию
+ * @returns {Promise<Track[]>} Результат поиска трека по названию
  */
 const findTrackByName = async (trackName: string): Promise<Track> => {
   try {
