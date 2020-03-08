@@ -1,2 +1,2 @@
-# discord-yamusic
+# YAMB
  Discord Bot for Yandex.Music
