@@ -59,48 +59,48 @@
     - [`Const` DefaultBotConfig](#const-defaultbotconfig)
     - [▪ **DefaultBotConfig**: *object*](#%E2%96%AA-defaultbotconfig-object)
 - [discord-yamusic](#discord-yamusic-1)
+- [Enums](#enums)
+  - [Enumeration: ResultCode](#enumeration-resultcode)
+    - [Index](#index-1)
+    - [Enumeration members](#enumeration-members)
 - [Classes](#classes-1)
   - [Class: BotCommandMap](#class-botcommandmap)
     - [Hierarchy](#hierarchy)
-    - [Index](#index-1)
+    - [Index](#index-2)
     - [Properties](#properties)
     - [Methods](#methods)
   - [Class: BotConsoleReader](#class-botconsolereader)
     - [Hierarchy](#hierarchy-1)
-    - [Index](#index-2)
+    - [Index](#index-3)
     - [Constructors](#constructors)
     - [Properties](#properties-1)
     - [Methods](#methods-1)
   - [Class: BotStatus](#class-botstatus)
     - [Hierarchy](#hierarchy-2)
-    - [Index](#index-3)
+    - [Index](#index-4)
     - [Constructors](#constructors-1)
     - [Properties](#properties-2)
     - [Methods](#methods-2)
   - [Class: MediaPlayer](#class-mediaplayer)
     - [Hierarchy](#hierarchy-3)
-    - [Index](#index-4)
+    - [Index](#index-5)
     - [Constructors](#constructors-2)
     - [Properties](#properties-3)
     - [Methods](#methods-3)
   - [Class: MediaQueue](#class-mediaqueue)
     - [Hierarchy](#hierarchy-4)
     - [Indexable](#indexable)
-    - [Index](#index-5)
+    - [Index](#index-6)
     - [Properties](#properties-4)
     - [Accessors](#accessors)
     - [Methods](#methods-4)
   - [Class: YBot](#class-ybot)
     - [Hierarchy](#hierarchy-5)
     - [Implements](#implements)
-    - [Index](#index-6)
+    - [Index](#index-7)
     - [Constructors](#constructors-3)
     - [Properties](#properties-5)
     - [Methods](#methods-5)
-- [Enums](#enums)
-  - [Enumeration: ResultCode](#enumeration-resultcode)
-    - [Index](#index-7)
-    - [Enumeration members](#enumeration-members)
 - [Interfaces](#interfaces-1)
   - [Interface: Bot](#interface-bot)
     - [Hierarchy](#hierarchy-6)
@@ -290,17 +290,21 @@ Defined in Documents/GitHub/yamb/src/core/BotEmbed.ts:8
 
 ▸ **add**(`cmd`: [ParsedMessage](#interfacesparsedmessagemd), `msg`: Message, `bot`: [Bot](#interfacesbotmd)): *Promise‹void›*
 
-Defined in Documents/GitHub/yamb/src/api/add.ts:9
+Defined in Documents/GitHub/yamb/src/api/add.ts:16
+
+Finds track using Yandex.Music API and adds it to track list
 
 **Parameters:**
 
-Name | Type |
------- | ------ |
-`cmd` | [ParsedMessage](#interfacesparsedmessagemd) |
-`msg` | Message |
-`bot` | [Bot](#interfacesbotmd) |
+Name | Type | Description |
+------ | ------ | ------ |
+`cmd` | [ParsedMessage](#interfacesparsedmessagemd) | Command and arguments |
+`msg` | Message | Message in which user asked to add track |
+`bot` | [Bot](#interfacesbotmd) | Bot instance |
 
 **Returns:** *Promise‹void›*
+
+Promise
 
 ___
 
@@ -308,17 +312,21 @@ ___
 
 ▸ **clear**(`cmd`: [ParsedMessage](#interfacesparsedmessagemd), `msg`: Message, `bot`: [Bot](#interfacesbotmd)): *Promise‹void›*
 
-Defined in Documents/GitHub/yamb/src/api/clear.ts:6
+Defined in Documents/GitHub/yamb/src/api/clear.ts:13
+
+Clears track list
 
 **Parameters:**
 
-Name | Type |
------- | ------ |
-`cmd` | [ParsedMessage](#interfacesparsedmessagemd) |
-`msg` | Message |
-`bot` | [Bot](#interfacesbotmd) |
+Name | Type | Description |
+------ | ------ | ------ |
+`cmd` | [ParsedMessage](#interfacesparsedmessagemd) | Command and arguments |
+`msg` | Message | Message in which user asked to clear queue |
+`bot` | [Bot](#interfacesbotmd) | Bot instance |
 
 **Returns:** *Promise‹void›*
+
+Promise
 
 ___
 
@@ -582,17 +590,21 @@ ___
 
 ▸ **help**(`cmd`: [ParsedMessage](#interfacesparsedmessagemd), `msg`: Message, `bot`: [Bot](#interfacesbotmd)): *Promise‹void›*
 
-Defined in Documents/GitHub/yamb/src/api/help.ts:8
+Defined in Documents/GitHub/yamb/src/api/help.ts:15
+
+Prints bot's help to channel
 
 **Parameters:**
 
-Name | Type |
------- | ------ |
-`cmd` | [ParsedMessage](#interfacesparsedmessagemd) |
-`msg` | Message |
-`bot` | [Bot](#interfacesbotmd) |
+Name | Type | Description |
+------ | ------ | ------ |
+`cmd` | [ParsedMessage](#interfacesparsedmessagemd) | Command and arguments |
+`msg` | Message | Message in which user asked to print help |
+`bot` | [Bot](#interfacesbotmd) | Bot instance |
 
 **Returns:** *Promise‹void›*
+
+Promise
 
 ___
 
@@ -680,17 +692,21 @@ ___
 
 ▸ **join**(`cmd`: [ParsedMessage](#interfacesparsedmessagemd), `msg`: Message, `bot`: [Bot](#interfacesbotmd)): *Promise‹void›*
 
-Defined in Documents/GitHub/yamb/src/api/join.ts:7
+Defined in Documents/GitHub/yamb/src/api/join.ts:14
+
+Makes bot join channel that user is in currently
 
 **Parameters:**
 
-Name | Type |
------- | ------ |
-`cmd` | [ParsedMessage](#interfacesparsedmessagemd) |
-`msg` | Message |
-`bot` | [Bot](#interfacesbotmd) |
+Name | Type | Description |
+------ | ------ | ------ |
+`cmd` | [ParsedMessage](#interfacesparsedmessagemd) | Command and arguments |
+`msg` | Message | Message in which user asked to join |
+`bot` | [Bot](#interfacesbotmd) | Bot instance |
 
 **Returns:** *Promise‹void›*
+
+Promise
 
 ___
 
@@ -714,17 +730,21 @@ ___
 
 ▸ **list**(`cmd`: [ParsedMessage](#interfacesparsedmessagemd), `msg`: Message, `bot`: [Bot](#interfacesbotmd)): *Promise‹void›*
 
-Defined in Documents/GitHub/yamb/src/api/list.ts:8
+Defined in Documents/GitHub/yamb/src/api/list.ts:15
+
+Prints track list
 
 **Parameters:**
 
-Name | Type |
------- | ------ |
-`cmd` | [ParsedMessage](#interfacesparsedmessagemd) |
-`msg` | Message |
-`bot` | [Bot](#interfacesbotmd) |
+Name | Type | Description |
+------ | ------ | ------ |
+`cmd` | [ParsedMessage](#interfacesparsedmessagemd) | Command and arguments |
+`msg` | Message | Message in which user asked to print track list |
+`bot` | [Bot](#interfacesbotmd) | Bot instance |
 
 **Returns:** *Promise‹void›*
+
+Promise
 
 ___
 
@@ -732,17 +752,21 @@ ___
 
 ▸ **move**(`cmd`: [ParsedMessage](#interfacesparsedmessagemd), `msg`: Message, `bot`: [Bot](#interfacesbotmd)): *Promise‹void›*
 
-Defined in Documents/GitHub/yamb/src/api/move.ts:6
+Defined in Documents/GitHub/yamb/src/api/move.ts:13
+
+Moves track to some other position in queue
 
 **Parameters:**
 
-Name | Type |
------- | ------ |
-`cmd` | [ParsedMessage](#interfacesparsedmessagemd) |
-`msg` | Message |
-`bot` | [Bot](#interfacesbotmd) |
+Name | Type | Description |
+------ | ------ | ------ |
+`cmd` | [ParsedMessage](#interfacesparsedmessagemd) | Command and arguments |
+`msg` | Message | Message in which user asked to move track |
+`bot` | [Bot](#interfacesbotmd) | Bot instance |
 
 **Returns:** *Promise‹void›*
+
+Promise
 
 ___
 
@@ -750,17 +774,21 @@ ___
 
 ▸ **np**(`cmd`: [ParsedMessage](#interfacesparsedmessagemd), `msg`: Message, `bot`: [Bot](#interfacesbotmd)): *Promise‹void›*
 
-Defined in Documents/GitHub/yamb/src/api/np.ts:7
+Defined in Documents/GitHub/yamb/src/api/np.ts:14
+
+Prints track that is currently being played
 
 **Parameters:**
 
-Name | Type |
------- | ------ |
-`cmd` | [ParsedMessage](#interfacesparsedmessagemd) |
-`msg` | Message |
-`bot` | [Bot](#interfacesbotmd) |
+Name | Type | Description |
+------ | ------ | ------ |
+`cmd` | [ParsedMessage](#interfacesparsedmessagemd) | Command and arguments |
+`msg` | Message | Message in which user asked to print track |
+`bot` | [Bot](#interfacesbotmd) | Bot instance |
 
 **Returns:** *Promise‹void›*
+
+Promise
 
 ___
 
@@ -790,17 +818,21 @@ ___
 
 ▸ **pause**(`cmd`: [ParsedMessage](#interfacesparsedmessagemd), `msg`: Message, `bot`: [Bot](#interfacesbotmd)): *Promise‹void›*
 
-Defined in Documents/GitHub/yamb/src/api/pause.ts:6
+Defined in Documents/GitHub/yamb/src/api/pause.ts:13
+
+Pauses bot's music
 
 **Parameters:**
 
-Name | Type |
------- | ------ |
-`cmd` | [ParsedMessage](#interfacesparsedmessagemd) |
-`msg` | Message |
-`bot` | [Bot](#interfacesbotmd) |
+Name | Type | Description |
+------ | ------ | ------ |
+`cmd` | [ParsedMessage](#interfacesparsedmessagemd) | Command and arguments |
+`msg` | Message | Message in which user asked to pause track |
+`bot` | [Bot](#interfacesbotmd) | Bot instance |
 
 **Returns:** *Promise‹void›*
+
+Promise
 
 ___
 
@@ -808,17 +840,21 @@ ___
 
 ▸ **play**(`cmd`: [ParsedMessage](#interfacesparsedmessagemd), `msg`: Message, `bot`: [Bot](#interfacesbotmd)): *Promise‹void›*
 
-Defined in Documents/GitHub/yamb/src/api/play.ts:7
+Defined in Documents/GitHub/yamb/src/api/play.ts:14
+
+Starts playing music from track list if bot is connected to channel
 
 **Parameters:**
 
-Name | Type |
------- | ------ |
-`cmd` | [ParsedMessage](#interfacesparsedmessagemd) |
-`msg` | Message |
-`bot` | [Bot](#interfacesbotmd) |
+Name | Type | Description |
+------ | ------ | ------ |
+`cmd` | [ParsedMessage](#interfacesparsedmessagemd) | Command and arguments |
+`msg` | Message | Message in which user asked to play music |
+`bot` | [Bot](#interfacesbotmd) | Bot instance |
 
 **Returns:** *Promise‹void›*
+
+Promise
 
 ___
 
@@ -826,17 +862,21 @@ ___
 
 ▸ **remove**(`cmd`: [ParsedMessage](#interfacesparsedmessagemd), `msg`: Message, `bot`: [Bot](#interfacesbotmd)): *Promise‹void›*
 
-Defined in Documents/GitHub/yamb/src/api/remove.ts:6
+Defined in Documents/GitHub/yamb/src/api/remove.ts:13
+
+Removes track from track list
 
 **Parameters:**
 
-Name | Type |
------- | ------ |
-`cmd` | [ParsedMessage](#interfacesparsedmessagemd) |
-`msg` | Message |
-`bot` | [Bot](#interfacesbotmd) |
+Name | Type | Description |
+------ | ------ | ------ |
+`cmd` | [ParsedMessage](#interfacesparsedmessagemd) | Command and arguments |
+`msg` | Message | Message in which user asked to remove track |
+`bot` | [Bot](#interfacesbotmd) | Bot instance |
 
 **Returns:** *Promise‹void›*
+
+Promise
 
 ___
 
@@ -844,17 +884,21 @@ ___
 
 ▸ **repeat**(`cmd`: [ParsedMessage](#interfacesparsedmessagemd), `msg`: Message, `bot`: [Bot](#interfacesbotmd)): *Promise‹void›*
 
-Defined in Documents/GitHub/yamb/src/api/repeat.ts:6
+Defined in Documents/GitHub/yamb/src/api/repeat.ts:13
+
+Toggles repeat mode
 
 **Parameters:**
 
-Name | Type |
------- | ------ |
-`cmd` | [ParsedMessage](#interfacesparsedmessagemd) |
-`msg` | Message |
-`bot` | [Bot](#interfacesbotmd) |
+Name | Type | Description |
+------ | ------ | ------ |
+`cmd` | [ParsedMessage](#interfacesparsedmessagemd) | Command and arguments |
+`msg` | Message | Message in which user asked to toggle repeat |
+`bot` | [Bot](#interfacesbotmd) | Bot instance |
 
 **Returns:** *Promise‹void›*
+
+Promise
 
 ___
 
@@ -878,17 +922,21 @@ ___
 
 ▸ **shuffle**(`cmd`: [ParsedMessage](#interfacesparsedmessagemd), `msg`: Message, `bot`: [Bot](#interfacesbotmd)): *Promise‹void›*
 
-Defined in Documents/GitHub/yamb/src/api/shuffle.ts:6
+Defined in Documents/GitHub/yamb/src/api/shuffle.ts:13
+
+Shuffles track list
 
 **Parameters:**
 
-Name | Type |
------- | ------ |
-`cmd` | [ParsedMessage](#interfacesparsedmessagemd) |
-`msg` | Message |
-`bot` | [Bot](#interfacesbotmd) |
+Name | Type | Description |
+------ | ------ | ------ |
+`cmd` | [ParsedMessage](#interfacesparsedmessagemd) | Command and arguments |
+`msg` | Message | Message in which user asked to shuffle |
+`bot` | [Bot](#interfacesbotmd) | Bot instance |
 
 **Returns:** *Promise‹void›*
+
+Promise
 
 ___
 
@@ -896,17 +944,21 @@ ___
 
 ▸ **skip**(`cmd`: [ParsedMessage](#interfacesparsedmessagemd), `msg`: Message, `bot`: [Bot](#interfacesbotmd)): *Promise‹void›*
 
-Defined in Documents/GitHub/yamb/src/api/skip.ts:6
+Defined in Documents/GitHub/yamb/src/api/skip.ts:14
+
+Skips current track
 
 **Parameters:**
 
-Name | Type |
------- | ------ |
-`cmd` | [ParsedMessage](#interfacesparsedmessagemd) |
-`msg` | Message |
-`bot` | [Bot](#interfacesbotmd) |
+Name | Type | Description |
+------ | ------ | ------ |
+`cmd` | [ParsedMessage](#interfacesparsedmessagemd) | Command and arguments |
+`msg` | Message | Message in which user asked to skip |
+`bot` | [Bot](#interfacesbotmd) | Bot instance |
 
 **Returns:** *Promise‹void›*
+
+Promise
 
 ___
 
@@ -914,17 +966,21 @@ ___
 
 ▸ **stop**(`cmd`: [ParsedMessage](#interfacesparsedmessagemd), `msg`: Message, `bot`: [Bot](#interfacesbotmd)): *Promise‹void›*
 
-Defined in Documents/GitHub/yamb/src/api/stop.ts:6
+Defined in Documents/GitHub/yamb/src/api/stop.ts:13
+
+Stops bot's music and makes him leave
 
 **Parameters:**
 
-Name | Type |
------- | ------ |
-`cmd` | [ParsedMessage](#interfacesparsedmessagemd) |
-`msg` | Message |
-`bot` | [Bot](#interfacesbotmd) |
+Name | Type | Description |
+------ | ------ | ------ |
+`cmd` | [ParsedMessage](#interfacesparsedmessagemd) | Command and arguments |
+`msg` | Message | Message in which user asked to stop track |
+`bot` | [Bot](#interfacesbotmd) | Bot instance |
 
 **Returns:** *Promise‹void›*
+
+Promise
 
 ___
 
@@ -932,17 +988,21 @@ ___
 
 ▸ **time**(`cmd`: [ParsedMessage](#interfacesparsedmessagemd), `msg`: Message, `bot`: [Bot](#interfacesbotmd)): *Promise‹void›*
 
-Defined in Documents/GitHub/yamb/src/api/time.ts:7
+Defined in Documents/GitHub/yamb/src/api/time.ts:14
+
+Print's elapsed time of current track
 
 **Parameters:**
 
-Name | Type |
------- | ------ |
-`cmd` | [ParsedMessage](#interfacesparsedmessagemd) |
-`msg` | Message |
-`bot` | [Bot](#interfacesbotmd) |
+Name | Type | Description |
+------ | ------ | ------ |
+`cmd` | [ParsedMessage](#interfacesparsedmessagemd) | Command and arguments |
+`msg` | Message | Message in which user asked to print time |
+`bot` | [Bot](#interfacesbotmd) | Bot instance |
 
 **Returns:** *Promise‹void›*
+
+Promise
 
 ___
 
@@ -950,17 +1010,21 @@ ___
 
 ▸ **volume**(`cmd`: [ParsedMessage](#interfacesparsedmessagemd), `msg`: Message, `bot`: [Bot](#interfacesbotmd)): *Promise‹void›*
 
-Defined in Documents/GitHub/yamb/src/api/volume.ts:6
+Defined in Documents/GitHub/yamb/src/api/volume.ts:13
+
+Sets bot's volume
 
 **Parameters:**
 
-Name | Type |
------- | ------ |
-`cmd` | [ParsedMessage](#interfacesparsedmessagemd) |
-`msg` | Message |
-`bot` | [Bot](#interfacesbotmd) |
+Name | Type | Description |
+------ | ------ | ------ |
+`cmd` | [ParsedMessage](#interfacesparsedmessagemd) | Command and arguments |
+`msg` | Message | Message in which user asked to change volume |
+`bot` | [Bot](#interfacesbotmd) | Bot instance |
 
 **Returns:** *Promise‹void›*
+
+Promise
 
 ## Object literals
 
@@ -1023,6 +1087,109 @@ Defined in Documents/GitHub/yamb/src/core/BotConfig.ts:53
 
 # discord-yamusic
 
+
+# Enums
+
+
+<a name="enumsresultcodemd"></a>
+
+[discord-yamusic](#globalsmd) › [ResultCode](#enumsresultcodemd)
+
+## Enumeration: ResultCode
+
+### Index
+
+#### Enumeration members
+
+* [BOT_USER](#bot_user)
+* [NO_APLHANUMERIC_AFTER_PREFIX](#no_aplhanumeric_after_prefix)
+* [NO_BODY](#no_body)
+* [NO_PREFIX_MATCH](#no_prefix_match)
+* [OK](#ok)
+* [SELF_MESSAGE](#self_message)
+* [UNKNOWN_ERROR](#unknown_error)
+
+### Enumeration members
+
+####  BOT_USER
+
+• **BOT_USER**:
+
+Defined in Documents/GitHub/yamb/src/core/BotCommandParser.ts:99
+
+The message received was sent by a bot account
+and was ignored.
+
+You can set the `allowBots` option to `true` to override
+this behavior.
+
+___
+
+####  NO_APLHANUMERIC_AFTER_PREFIX
+
+• **NO_APLHANUMERIC_AFTER_PREFIX**:
+
+Defined in Documents/GitHub/yamb/src/core/BotCommandParser.ts:125
+
+The message started with the prefix string, but had
+a non-alphanumeric character (not in range `a-z`, `A-Z`, or `0-9`) after it, which is not allowed.
+
+___
+
+####  NO_BODY
+
+• **NO_BODY**:
+
+Defined in Documents/GitHub/yamb/src/core/BotCommandParser.ts:119
+
+The message contained only the prefix string,
+and nothing more.
+
+___
+
+####  NO_PREFIX_MATCH
+
+• **NO_PREFIX_MATCH**:
+
+Defined in Documents/GitHub/yamb/src/core/BotCommandParser.ts:113
+
+The message does not start with the provided prefix.
+
+___
+
+####  OK
+
+• **OK**:
+
+Defined in Documents/GitHub/yamb/src/core/BotCommandParser.ts:90
+
+No error occurred
+
+___
+
+####  SELF_MESSAGE
+
+• **SELF_MESSAGE**:
+
+Defined in Documents/GitHub/yamb/src/core/BotCommandParser.ts:108
+
+The message received was sent by the same account
+that received it and was ignored.
+
+You can set the `allowSelf` option to `true` to override
+this behavior.
+
+___
+
+####  UNKNOWN_ERROR
+
+• **UNKNOWN_ERROR**:
+
+Defined in Documents/GitHub/yamb/src/core/BotCommandParser.ts:132
+
+An unknown error occurred while parsing the message,
+this is likely to be a bug with discord-command-parser,
+and should be reported to the Issues section on Github.
 
 # Classes
 
@@ -3028,109 +3195,6 @@ ___
 Defined in Documents/GitHub/yamb/src/core/Bot.ts:146
 
 **Returns:** *void*
-
-# Enums
-
-
-<a name="enumsresultcodemd"></a>
-
-[discord-yamusic](#globalsmd) › [ResultCode](#enumsresultcodemd)
-
-## Enumeration: ResultCode
-
-### Index
-
-#### Enumeration members
-
-* [BOT_USER](#bot_user)
-* [NO_APLHANUMERIC_AFTER_PREFIX](#no_aplhanumeric_after_prefix)
-* [NO_BODY](#no_body)
-* [NO_PREFIX_MATCH](#no_prefix_match)
-* [OK](#ok)
-* [SELF_MESSAGE](#self_message)
-* [UNKNOWN_ERROR](#unknown_error)
-
-### Enumeration members
-
-####  BOT_USER
-
-• **BOT_USER**:
-
-Defined in Documents/GitHub/yamb/src/core/BotCommandParser.ts:99
-
-The message received was sent by a bot account
-and was ignored.
-
-You can set the `allowBots` option to `true` to override
-this behavior.
-
-___
-
-####  NO_APLHANUMERIC_AFTER_PREFIX
-
-• **NO_APLHANUMERIC_AFTER_PREFIX**:
-
-Defined in Documents/GitHub/yamb/src/core/BotCommandParser.ts:125
-
-The message started with the prefix string, but had
-a non-alphanumeric character (not in range `a-z`, `A-Z`, or `0-9`) after it, which is not allowed.
-
-___
-
-####  NO_BODY
-
-• **NO_BODY**:
-
-Defined in Documents/GitHub/yamb/src/core/BotCommandParser.ts:119
-
-The message contained only the prefix string,
-and nothing more.
-
-___
-
-####  NO_PREFIX_MATCH
-
-• **NO_PREFIX_MATCH**:
-
-Defined in Documents/GitHub/yamb/src/core/BotCommandParser.ts:113
-
-The message does not start with the provided prefix.
-
-___
-
-####  OK
-
-• **OK**:
-
-Defined in Documents/GitHub/yamb/src/core/BotCommandParser.ts:90
-
-No error occurred
-
-___
-
-####  SELF_MESSAGE
-
-• **SELF_MESSAGE**:
-
-Defined in Documents/GitHub/yamb/src/core/BotCommandParser.ts:108
-
-The message received was sent by the same account
-that received it and was ignored.
-
-You can set the `allowSelf` option to `true` to override
-this behavior.
-
-___
-
-####  UNKNOWN_ERROR
-
-• **UNKNOWN_ERROR**:
-
-Defined in Documents/GitHub/yamb/src/core/BotCommandParser.ts:132
-
-An unknown error occurred while parsing the message,
-this is likely to be a bug with discord-command-parser,
-and should be reported to the Issues section on Github.
 
 # Interfaces
 

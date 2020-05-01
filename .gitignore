@@ -1,7 +1,6 @@
 .DS_Store
 node_modules
 /dist
-/docs
 /temp-docs
 # Coverage reports
 coverage
