@@ -1,8 +1,6 @@
 # YAMB
 
-YAMB is simple Yandex.Music bot for Discord
-
----
+> YAMB is simple Yandex.Music bot for Discord
 
 ## Installation
 
@@ -33,14 +31,12 @@ $ npm run dev
 ```
 ~help
 ```
----
 
 ## Contributing
 - Clone repo using [https://github.com/dvasiliev97/yamb.git](https://github.com/dvasiliev97/yamb.git)
 - Make YAMB better
 - Create a new pull request using [https://github.com/dvasiliev97/yamb/compare](https://github.com/dvasiliev97/yamb/compare)
 
----
 
 ## Team
 
