@@ -2,6 +2,13 @@ import { Message } from 'discord.js';
 
 import { Bot } from '../core/BotInterface';
 import { ParsedMessage } from '../core/BotCommandParser';
+/**
+ * Sets bot's volume
+ * @param  {ParsedMessage} cmd Command and arguments
+ * @param  {Message} msg Message in which user asked to change volume
+ * @param  {Bot} bot Bot instance
+ * @returns Promise
+ */
 
 const volume = async (cmd: ParsedMessage, msg: Message, bot: Bot): Promise<void> => {
   if (cmd.arguments.length) {
