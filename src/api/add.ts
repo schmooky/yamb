@@ -6,6 +6,13 @@ import { MediaItem } from '../core/BotMedia';
 
 import trackService from '../services/track.service';
 
+/**
+ * Finds track using Yandex.Music API and adds it to track list
+ * @param  {ParsedMessage} cmd Command and arguments
+ * @param  {Message} msg Message in which user asked to add track
+ * @param  {Bot} bot Bot instance
+ * @returns Promise
+ */
 const add = async (cmd: ParsedMessage, msg: Message, bot: Bot): Promise<void> => {
   const args = cmd.arguments.join(' ');
 

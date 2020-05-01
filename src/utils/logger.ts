@@ -1,7 +1,6 @@
 import winston from 'winston';
+import chalk from 'chalk';
 import dotenv from 'dotenv';
-
-import SMTPTransport from './winstonSMTPTransport';
 
 dotenv.config();
 
@@ -39,22 +38,11 @@ const logger = winston.createLogger({
   ],
 });
 
-logger.add(new SMTPTransport({
-  level: 'error',
-  format: winston.format.combine(
-    winston.format.timestamp(),
-    winston.format.metadata(),
-    winston.format.json(),
-  ),
-}));
-
 if (process.env.NODE_ENV !== 'production') {
   logger.add(new winston.transports.Console({
     level: 'debug',
     format: winston.format.combine(
-      winston.format.colorize(),
-      winston.format.timestamp(),
-      winston.format.printf((info): string => `${info.timestamp} [${info.level}]: ${info.message}`),
+      winston.format.printf((info): string => chalk.blue(`${info.message}`)),
     ),
   }));
 }

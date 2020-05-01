@@ -4,6 +4,13 @@ import { Bot } from '../core/BotInterface';
 import { ParsedMessage } from '../core/BotCommandParser';
 
 import { embedList } from '../core/BotEmbed';
+/**
+ * Prints track list
+ * @param  {ParsedMessage} cmd Command and arguments
+ * @param  {Message} msg Message in which user asked to print track list
+ * @param  {Bot} bot Bot instance
+ * @returns Promise
+ */
 
 const list = async (cmd: ParsedMessage, msg: Message, bot: Bot): Promise<void> => {
   const { queue } = bot.player;

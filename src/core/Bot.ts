@@ -13,7 +13,6 @@ import { embedPing } from './BotEmbed';
 
 import logger from '../utils/logger';
 
-// Commands
 import help from '../api/help';
 import play from '../api/play';
 import stop from '../api/stop';
@@ -98,7 +97,7 @@ class YBot implements Bot {
       .on('ready', (): void => {
         if (this.online) logger.debug('Reconnected!');
 
-        else logger.debug('YAMusic Bot Online!');
+        else logger.debug('Online!');
 
         this.online = true;
 

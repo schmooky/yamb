@@ -2,6 +2,13 @@ import { Message } from 'discord.js';
 
 import { Bot } from '../core/BotInterface';
 import { ParsedMessage } from '../core/BotCommandParser';
+/**
+ * Moves track to some other position in queue
+ * @param  {ParsedMessage} cmd Command and arguments
+ * @param  {Message} msg Message in which user asked to move track
+ * @param  {Bot} bot Bot instance
+ * @returns Promise
+ */
 
 const move = async (cmd: ParsedMessage, msg: Message, bot: Bot): Promise<void> => {
   if (cmd.arguments.length > 1) {
