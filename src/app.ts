@@ -13,5 +13,6 @@ bot
     bot.listen();
   })
   .catch((err: Error): void => {
+    logger.debug('Bot Not Ready')
     logger.error(err);
   });

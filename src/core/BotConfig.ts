@@ -27,6 +27,7 @@ export interface BotConfig {
     bitrate: number | 'auto';
   };
 }
+import 'dotenv/config';
 
 const DefaultBotConfig: BotConfig = {
   auto: {
@@ -37,12 +38,12 @@ const DefaultBotConfig: BotConfig = {
   },
 
   discord: {
-    token: process.env.BOT_TOKEN,
+    token: process.env.BOT_TOKEN!,
     log: true,
   },
 
   command: {
-    symbol: process.env.PREFIX,
+    symbol: process.env.PREFIX!,
   },
 
   queue: {
